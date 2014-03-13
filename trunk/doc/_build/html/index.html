@@ -1,0 +1,353 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to the osm2hydro Documentation &mdash; osm2hydro 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="osm2hydro 0.1 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">osm2hydro 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="welcome-to-the-osm2hydro-documentation">
+<h1>Welcome to the osm2hydro Documentation<a class="headerlink" href="#welcome-to-the-osm2hydro-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This document describes osm2hydro. osm2hydro is a set of (python) tools
+that can be used to extract information from OpenStreetMap (OSM) and
+the Shuttle Radar Topography Mission (SRTM) to
+kick-start hydrological and hydraulic modelling.</p>
+<p>In short the procedure first clips a region of interest from an OSM file,
+creates shapefiles from selected features and uses those to create
+gridded maps with fraction of paved area, fraction of open water and
+fraction of unpaved area in each cell.  The tools are fully configurable
+and can be used to generate other maps. They are available through the
+Deltares OpenEarth initiative (<a class="reference external" href="https://publicwiki.deltares.nl/display/OET/OpenEarth">https://publicwiki.deltares.nl/display/OET/OpenEarth</a>)</p>
+<p>The methods we have developed to extract land use maps, is divided in
+the following steps (see also Figure 1):</p>
+<ol class="arabic simple">
+<li>Cut-out a specific region (for the model) from the downloaded OSM file
+using osmconvert (<a class="reference external" href="http://wiki.openstreetmap.org/wiki/Osmconvert">http://wiki.openstreetmap.org/wiki/Osmconvert</a>),
+a standard tool which we use unaltered</li>
+<li>Convert the OSM file to a set of shape files using ogr2ogr (from gdal version 1.10)</li>
+<li>Convert the shape files to a set of grids (gdal. poly_density, <a class="reference external" href="http://www.gdal.org/">http://www.gdal.org/</a>)</li>
+<li>Perform corrections on the grids and shapes and string everything together
+(OSM2hydro, <a class="reference external" href="https://publicwiki.deltares.nl/display/OET/OpenEarth">https://publicwiki.deltares.nl/display/OET/OpenEarth</a>)</li>
+</ol>
+<div class="figure">
+<img alt="_images/Fig-1-schematic.png" src="_images/Fig-1-schematic.png" />
+</div>
+<p>Figure 1 Flow chart of the steps taken to derive land use
+(and specifically paved area fraction) maps from OSM</p>
+<p>In some areas the different land-use polygons nearly cover the whole area.
+As such, the LU polygons can be used to generate the paved, unpaved and
+water covered area maps we are aiming to derive. However, in large areas
+(also in Western Europe) the coverage is (very) incomplete. For example,
+urban areas in and around Liege are hardly covered (see Figure 2). As such we
+have taken the following approach to come to a best estimate of paved area in larger areas:</p>
+<div class="figure">
+<img alt="_figs/Fig-3-liege-four.png" src="_figs/Fig-3-liege-four.png" />
+</div>
+<p>Figure 3 Example of the area around Liege with a particularly poor
+OSM coverage.  Paved area determined from Corine (top left),
+paved area as estimated from OSM coverage indicating paved land use (top right),
+paved land use estimated from road density (bottom left) and a
+merger of the two OSM-derived estimates</p>
+<p>After the polygons have been extracted from the OSM file the first step is
+to generate high resolution grids from the shape files. The high resolution
+grids by default have a 10 times higher resolution in both the X and Y
+direction. The high resolution grids are then resampled to the final
+resolution, thus allowing the determination of fractional coverage in each cell.
+For all road classes an estimated width is configured and this is used
+to generate a (high resolution) grid in which the width is used to
+calculate the fraction covered by roads (assuming the road crossed that
+cell in a straight line). At the same time a road-density map is
+calculated using the same information but in which all roads have a unit width.
+From the density maps and a configurable percentile (default 90%) in the
+road density map a map maximum density () and a threshold value ()
+for urban areas is determined. These values are then used in a simple
+equation (for all cells &gt; ) to estimate the paved area within a cell:</p>
+<div class="math">
+<p><span class="math">paved = min : 1.0, (den^{cell} + f (den^{Max} - den^{TH}))/den^{Max}</span></p>
+</div><p>The above equation (where, <span class="math">f</span> a scaling factor is 0.75) basically generates
+paved area (houses etc) for all cells that have a road density higher than
+the threshold. This map (of paved area fraction) is then merged with the
+paved area map that is determined from the polygons in OpenStreetMap.
+The merge is done by first applying a multiplication factor to the paved
+area determined from the road density and then taking the maximum of the two
+maps. The multiplication factor (0.8 in this study) represents the
+average paved area fraction in urban areas.
+In a third step the resulting map is merged with the maps that holds
+the fraction of road cover in the cell by adding the two maps together
+while maximising the result to 1.0.</p>
+<p>Next two other maps are created, one representing the fraction of
+unpaved land use (from polygons that represent “green” areas) and one
+representing the fraction of open water. The open water fraction maps
+is derived from a combination of waterways in OSM, taking into account
+the river width if it is available, and land use classified as water
+(the combined water maps are maximized at 1.0).</p>
+<p>Generally, the sum of the three maps (paved, unpaved, water) is not 1,
+therefore the maps are adjusted using the assumption that the water
+fraction map and the roads fraction maps are correct using the following steps:</p>
+<p>Add the water fraction and paved area fraction maps and subtract the surplus
+(&gt; 1.0) from the paved area map.</p>
+<p>If the paved area fraction is not large enough to supply all the surplus
+coverage the surplus is subtracted from the unpaved fraction map</p>
+<p>If the resulting total cover is larger than 1 it is assumed that the
+unpaved polygons are correct and the surplus is subtracted from the paved area
+any unassigned area in the resulting maps (total coverage &lt; 1.0) is added to the unpaved fraction map
+finally, the road fraction map is used to “burn in” road coverage
+over all open water and unpaved area coverage</p>
+<p>Additionally, we created a procedure to use OSM data in the schematisation
+of a hydraulic overland flow model. OSM line elements that represent
+elevated landscape features are burnt onto an elevation map. We use
+the Shuttle Radar Topography Mission 90 meter elevation map
+(<a class="reference external" href="http://www2.jpl.nasa.gov/srtm/">http://www2.jpl.nasa.gov/srtm/</a>). Such landscape features are
+essential to include in hydraulic overland flow models as
+they may block floods and reroute water in other directions.</p>
+</div>
+<div class="section" id="description-of-the-python-modules">
+<h2>Description of the python modules<a class="headerlink" href="#description-of-the-python-modules" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="osm2hydro">
+<h3>osm2hydro<a class="headerlink" href="#osm2hydro" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="module-osm2shp">
+<span id="osm2shp"></span><h3>osm2shp<a class="headerlink" href="#module-osm2shp" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>osm2shp - convert an osm|pbf file to a set of shapefiles using ogr2ogr. Fitering</dt>
+<dd>with tags is controlled by a .ini file.</dd>
+</dl>
+<p>Usage: osm2shp.py [-h][-c configfile] -O my_osm_file.osm|pbf -o outputdir</p>
+<blockquote>
+<div><p>-O osm_file - the osm|pbf file
+-o outputdir - the directory to store the output in
+-h - show this information
+-c configfile (default is osm2shp.ini)
+-M maxproc - maximum number of ogr2ogr processes to start (default = 2)</p>
+<ul class="simple">
+<li>ogr2ogr (tested with gdal &gt;= 1.10.0)</li>
+<li>the OSM_CONFIG_FILE environment var should be set and point to
+a valid gdal osmconf.ini file</li>
+</ul>
+<p>The ini file has a section for each shape file created:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">lu_roads_sec</span><span class="p">]</span>
+<span class="nb">type</span><span class="o">=</span><span class="n">lines</span>
+<span class="n">highway</span><span class="o">=</span><span class="n">motorway_link</span><span class="p">,</span><span class="n">secondary</span><span class="p">,</span><span class="s">&quot;road&quot;</span>
+<span class="n">aeroway</span><span class="o">=</span><span class="s">&#39;runway&#39;</span><span class="p">,</span><span class="s">&#39;taxiway&#39;</span>
+    
+<span class="p">[</span><span class="n">lu_roads_main</span><span class="p">]</span>
+<span class="nb">type</span><span class="o">=</span><span class="n">lines</span> 
+<span class="n">highway</span><span class="o">=</span><span class="s">&#39;motorway&#39;</span><span class="p">,</span><span class="s">&#39;trunk&#39;</span><span class="p">,</span><span class="s">&#39;primary&#39;</span>
+    
+    
+<span class="p">[</span><span class="n">lu_roads_small</span><span class="p">]</span>
+<span class="nb">type</span><span class="o">=</span><span class="n">lines</span>
+<span class="n">highway</span><span class="o">=</span><span class="s">&#39;footway&#39;</span><span class="p">,</span><span class="s">&#39;path&#39;</span><span class="p">,</span><span class="s">&#39;pedestrian&#39;</span><span class="p">,</span><span class="s">&#39;residential&#39;</span><span class="p">,</span><span class="s">&#39;service&#39;</span><span class="p">,</span><span class="s">&#39;tertiary&#39;</span><span class="p">,</span><span class="s">&#39;track&#39;</span><span class="p">,</span><span class="s">&#39;unclassified&#39;</span><span class="p">,</span><span class="s">&#39;cycleway&#39;</span>
+    
+<span class="p">[</span><span class="n">lu_water</span><span class="p">]</span>
+<span class="nb">type</span><span class="o">=</span><span class="n">multipolygons</span>
+<span class="n">natural</span><span class="o">=</span><span class="s">&#39;water&#39;</span><span class="p">,</span><span class="s">&#39;reservoir&#39;</span><span class="p">,</span><span class="s">&#39;basin&#39;</span><span class="p">,</span><span class="s">&#39;salt_pond&#39;</span>
+<span class="n">landuse</span><span class="o">=</span><span class="s">&#39;water&#39;</span><span class="p">,</span><span class="s">&#39;basin&#39;</span><span class="p">,</span><span class="s">&#39;reservoir&#39;</span><span class="p">,</span><span class="s">&#39;salt_pond&#39;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>$Author: $
+$Id: $
+$Rev: $</p>
+<dl class="function">
+<dt id="osm2shp.configget">
+<tt class="descclassname">osm2shp.</tt><tt class="descname">configget</tt><big>(</big><em>log</em>, <em>config</em>, <em>section</em>, <em>var</em>, <em>default</em><big>)</big><a class="headerlink" href="#osm2shp.configget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a string from a config file (.ini) and returns a default value if
+the key is not found. If the key is not found it also sets the value 
+with the default in the config-file</p>
+<dl class="docutils">
+<dt>Input:</dt>
+<dd><ul class="first last simple">
+<li>config - python ConfigParser object</li>
+<li>section - section in the file</li>
+<li>var - variable (key) to get</li>
+<li>default - default string</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>string - either the value from the config file or the default value</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="osm2shp.configset">
+<tt class="descclassname">osm2shp.</tt><tt class="descname">configset</tt><big>(</big><em>config</em>, <em>section</em>, <em>var</em>, <em>value</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#osm2shp.configset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a string in the in memory representation of the config object
+Deos NOT overwrite existing values if overwrite is set to False (default)</p>
+<dl class="docutils">
+<dt>Input:</dt>
+<dd><ul class="first last simple">
+<li>config - python ConfigParser object</li>
+<li>section - section in the file</li>
+<li>var - variable (key) to set</li>
+<li>value - the value to set</li>
+<li>overwrite (optional, default is False)</li>
+</ul>
+</dd>
+<dt>Returns:</dt>
+<dd><ul class="first last simple">
+<li>nothing</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="osm2shp.extractlayers_new">
+<tt class="descclassname">osm2shp.</tt><tt class="descname">extractlayers_new</tt><big>(</big><em>config</em>, <em>osmfile</em>, <em>outputdir</em>, <em>maxprocesses=2</em>, <em>ogr2ogr='ogr2ogr'</em><big>)</big><a class="headerlink" href="#osm2shp.extractlayers_new" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="http://stackoverflow.com/questions/4992400/running-several-system-commands-in-parallel">http://stackoverflow.com/questions/4992400/running-several-system-commands-in-parallel</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="osm2shp.iniFileSetUp">
+<tt class="descclassname">osm2shp.</tt><tt class="descname">iniFileSetUp</tt><big>(</big><em>configfile</em><big>)</big><a class="headerlink" href="#osm2shp.iniFileSetUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads .ini file and sets default values if not present</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="osm2shp.main">
+<tt class="descclassname">osm2shp.</tt><tt class="descname">main</tt><big>(</big><em>argv=None</em><big>)</big><a class="headerlink" href="#osm2shp.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main function, processes the command-line options, reads the config file
+and starts the extract function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="osm2shp.mkogr2ogrstr">
+<tt class="descclassname">osm2shp.</tt><tt class="descname">mkogr2ogrstr</tt><big>(</big><em>config</em>, <em>sec</em><big>)</big><a class="headerlink" href="#osm2shp.mkogr2ogrstr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the ogr2ogr string from a ini file to select data using 
+sql statements
+- one statement for each section
+- multiple tags per feature using a comma separated list</p>
+</dd></dl>
+
+</div>
+<div class="section" id="map2shape">
+<h3>map2shape<a class="headerlink" href="#map2shape" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="gdal-density">
+<h3>gdal_density<a class="headerlink" href="#gdal-density" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="dem-filter">
+<h3>dem_filter<a class="headerlink" href="#dem-filter" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+<div class="section" id="todo">
+<h2>TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to the osm2hydro Documentation</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#description-of-the-python-modules">Description of the python modules</a><ul>
+<li><a class="reference internal" href="#osm2hydro">osm2hydro</a></li>
+<li><a class="reference internal" href="#module-osm2shp">osm2shp</a></li>
+<li><a class="reference internal" href="#map2shape">map2shape</a></li>
+<li><a class="reference internal" href="#gdal-density">gdal_density</a></li>
+<li><a class="reference internal" href="#dem-filter">dem_filter</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference internal" href="#todo">TODO</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">osm2hydro 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Deltares.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>
