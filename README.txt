@@ -34,6 +34,9 @@ Installation
 
 List all required libraries, download links, versions, where to put them (third-party)
 - GDAL >- 10.1.0
+- PyWavelets - http://www.pybytes.com/pywavelets/
+- PyProj - http://code.google.com/p/pyproj/
+
 
 Usage
 =====
