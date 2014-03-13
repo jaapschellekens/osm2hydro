@@ -23,7 +23,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="osm2hydro 0.1 documentation" href="#" /> 
+    <link rel="top" title="osm2hydro 0.1 documentation" href="#" />
+    <link rel="next" title="Using the tools" href="usage.html" /> 
   </head>
   <body>
     <div class="related">
@@ -35,6 +36,9 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Using the tools"
+             accesskey="N">next</a> |</li>
         <li><a href="#">osm2hydro 0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -52,12 +56,27 @@
 that can be used to extract information from OpenStreetMap (OSM) and
 the Shuttle Radar Topography Mission (SRTM) to
 kick-start hydrological and hydraulic modelling.</p>
-<p>In short the procedure first clips a region of interest from an OSM file,
-creates shapefiles from selected features and uses those to create
+</div>
+<div class="section" id="how-it-works">
+<h2>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
+<p>First a region of interest is clipped from an OSM file.
+From this the tools create shapefiles os selected features (OSM tags) and use
+those to create
 gridded maps with fraction of paved area, fraction of open water and
 fraction of unpaved area in each cell.  The tools are fully configurable
-and can be used to generate other maps. They are available through the
-Deltares OpenEarth initiative (<a class="reference external" href="https://publicwiki.deltares.nl/display/OET/OpenEarth">https://publicwiki.deltares.nl/display/OET/OpenEarth</a>)</p>
+and can be used to generate other maps. They are part of the
+Deltares OpenEarth initiative (<a class="reference external" href="https://publicwiki.deltares.nl/display/OET/OpenEarth">https://publicwiki.deltares.nl/display/OET/OpenEarth</a>)
+and can be downloaded from goodle code at <a class="reference external" href="http://osm2hydro.googlecode.com">http://osm2hydro.googlecode.com</a>)</p>
+<p>Additionally, we created a procedure to use OSM data in the schematisation
+of a hydraulic overland flow model. OSM line elements that represent
+elevated landscape features are burnt onto an elevation map. We use
+the Shuttle Radar Topography Mission 90 meter elevation map
+(<a class="reference external" href="http://www2.jpl.nasa.gov/srtm/">http://www2.jpl.nasa.gov/srtm/</a>). Such landscape features are
+essential to include in hydraulic overland flow models as
+they may block floods and reroute water in other directions.</p>
+</div>
+<div class="section" id="creating-the-paved-area-grids">
+<h2>Creating the paved area grids<a class="headerlink" href="#creating-the-paved-area-grids" title="Permalink to this headline">¶</a></h2>
 <p>The methods we have developed to extract land use maps, is divided in
 the following steps (see also Figure 1):</p>
 <ol class="arabic simple">
@@ -81,7 +100,7 @@ water covered area maps we are aiming to derive. However, in large areas
 urban areas in and around Liege are hardly covered (see Figure 2). As such we
 have taken the following approach to come to a best estimate of paved area in larger areas:</p>
 <div class="figure">
-<img alt="_figs/Fig-3-liege-four.png" src="_figs/Fig-3-liege-four.png" />
+<img alt="_images/Fig-3-liege-four.jpg" src="_images/Fig-3-liege-four.jpg" />
 </div>
 <p>Figure 3 Example of the area around Liege with a particularly poor
 OSM coverage.  Paved area determined from Corine (top left),
@@ -133,256 +152,33 @@ unpaved polygons are correct and the surplus is subtracted from the paved area
 any unassigned area in the resulting maps (total coverage &lt; 1.0) is added to the unpaved fraction map
 finally, the road fraction map is used to “burn in” road coverage
 over all open water and unpaved area coverage</p>
-<p>Additionally, we created a procedure to use OSM data in the schematisation
-of a hydraulic overland flow model. OSM line elements that represent
-elevated landscape features are burnt onto an elevation map. We use
-the Shuttle Radar Topography Mission 90 meter elevation map
-(<a class="reference external" href="http://www2.jpl.nasa.gov/srtm/">http://www2.jpl.nasa.gov/srtm/</a>). Such landscape features are
-essential to include in hydraulic overland flow models as
-they may block floods and reroute water in other directions.</p>
+</div>
+<div class="section" id="combining-osm-and-srtm">
+<h2>Combining OSM and SRTM<a class="headerlink" href="#combining-osm-and-srtm" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Using the tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#using-the-command-line-scripts">Using the command-line scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#using-the-tools-from-within-python">Using the tools from within python</a></li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 <div class="section" id="description-of-the-python-modules">
 <h2>Description of the python modules<a class="headerlink" href="#description-of-the-python-modules" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="module-osm2hydro">
-<span id="osm2hydro"></span><h3>osm2hydro<a class="headerlink" href="#module-osm2hydro" title="Permalink to this headline">¶</a></h3>
-<p>Execute the osm2hydro executable.</p>
-<dl class="docutils">
-<dt>Usage:</dt>
-<dd><dl class="first docutils">
-<dt>osm2hydro.py  -c inifilename [-E extent][-W working dir][-C caseFolder]</dt>
-<dd>[-N caseName][-O osm_extract_file][-F osmfile]</dd>
-</dl>
-<p>-c inifilename
-Optional (overrides the ini settings):</p>
-<blockquote class="last">
-<div><table class="docutils option-list" frame="void" rules="none">
-<col class="option" />
-<col class="description" />
-<tbody valign="top">
-<tr><td class="option-group">
-<kbd><span class="option">-E</span></kbd></td>
-<td>extent according to: [xmin, ymin, xmax, ymax]</td></tr>
-</tbody>
-</table>
-<p>-W working_directory
--C caseFolder
--N caseName
--O osm_extract_file
--F osmfile</p>
-</div></blockquote>
-</dd>
-<dt>Description:</dt>
-<dd>osm2hydro generates hydrological and hydraulic model schematisations 
-from OpenStreetMap data</dd>
-<dt>Status:</dt>
-<dd>Still under construction by Jaap Schellekens, Hessel Winsemius, Jan Talsma, 
-Ferdinand Diermanse, Ruben Dahm, Reinder Brolsma and Daniel Tollenaar
-TODO: cleanup script, move stuff to functions</dd>
-<dt>Dependencies:</dt>
-<dd><blockquote class="first">
-<div>For osm2hydro, it is mandatory that GDAL version 1.10 or higher is installed.</div></blockquote>
-<dl class="docutils">
-<dt>Copyright notice</dt>
-<dd><dl class="first docutils">
-<dt>Copyright (C) 2012 Deltares, contact</dt>
-<dd><p class="first">H.(Hessel) C. Winsemius</p>
-<p><a class="reference external" href="mailto:hessel&#46;winsemius&#37;&#52;&#48;deltares&#46;nl">hessel<span>&#46;</span>winsemius<span>&#64;</span>deltares<span>&#46;</span>nl</a></p>
-<p class="last">Rotterdamseweg 185
-Delft
-The Netherlands</p>
-</dd>
-</dl>
-<p>This function is free software under the PBL-Deltares MoU: redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation, either
-version 2.1 of the License, or (at your option) any later version.</p>
-<p>This library is distributed in the hope that &#8216;it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.</p>
-<p class="last">You should have received a copy of the GNU Lesser General Public
-License along with this library. If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;.
-&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;</p>
-</dd>
-</dl>
-<p class="last">Version &lt;<a class="reference external" href="http://svnbook.red-bean.com/en/1.5/svn.advanced.props.special.keywords.html">http://svnbook.red-bean.com/en/1.5/svn.advanced.props.special.keywords.html</a>&gt;</p>
-</dd>
-</dl>
-<p>Created: 04 Nov 2010
-Created and tested with python 2.6.5.4</p>
-<p>$Id: OSM2hydro.py 798 2013-10-02 07:11:23Z schelle $
-$Date: 2013-10-02 09:11:23 +0200 (Wed, 02 Oct 2013) $
-$Author: schelle $
-$Revision: 798 $
-$HeadURL: <a class="reference external" href="https://repos.deltares.nl/repos/Hydrology/trunk/OpenStreetMaps/src/OSM2hydro/OSM2hydro.py">https://repos.deltares.nl/repos/Hydrology/trunk/OpenStreetMaps/src/OSM2hydro/OSM2hydro.py</a> $
-$Keywords: $</p>
-<dl class="function">
-<dt id="osm2hydro.burn_lines">
-<tt class="descclassname">osm2hydro.</tt><tt class="descname">burn_lines</tt><big>(</big><em>shapeFile</em>, <em>mapFile</em>, <em>value</em>, <em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#osm2hydro.burn_lines" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make a map with zeros and burned in values at locations where a line shape is present
-shapeFile:      string - Shapefile with line elements that need to be burned
-mapFile:        string - Target GeoTIFF map file that will be written in this step
-value:          string - The value that should be burned into the map
-x:              1-D array - x-axis of target map
-y:              1-D array - y-axis of target map</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2hydro.closeLogger">
-<tt class="descclassname">osm2hydro.</tt><tt class="descname">closeLogger</tt><big>(</big><em>logger</em>, <em>ch</em><big>)</big><a class="headerlink" href="#osm2hydro.closeLogger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Closes the logger</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2hydro.configget">
-<tt class="descclassname">osm2hydro.</tt><tt class="descname">configget</tt><big>(</big><em>log</em>, <em>config</em>, <em>section</em>, <em>var</em>, <em>default</em><big>)</big><a class="headerlink" href="#osm2hydro.configget" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets a string from a config file (.ini) and returns a default value if
-the key is not found. If the key is not found it also sets the value 
-with the default in the config-file</p>
-<dl class="docutils">
-<dt>Input:</dt>
-<dd><ul class="first last simple">
-<li>config - python ConfigParser object</li>
-<li>section - section in the file</li>
-<li>var - variable (key) to get</li>
-<li>default - default string</li>
+<div class="section" id="osm2hydro">
+<h3>osm2hydro<a class="headerlink" href="#osm2hydro" title="Permalink to this headline">¶</a></h3>
+<p>This is the main script. It needs an .ini file to retrieve it&#8217;s settings
+and execute  programs and scripts.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="osm2hydro.html">osm2hydro</a></li>
 </ul>
-</dd>
-<dt>Returns:</dt>
-<dd><ul class="first last simple">
-<li>string - either the value from the config file or the default value</li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2hydro.configset">
-<tt class="descclassname">osm2hydro.</tt><tt class="descname">configset</tt><big>(</big><em>config</em>, <em>section</em>, <em>var</em>, <em>value</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#osm2hydro.configset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets a string in the in memory representation of the config object
-Deos NOT overwrite existing values if overwrite is set to False (default)</p>
-<dl class="docutils">
-<dt>Input:</dt>
-<dd><ul class="first last simple">
-<li>config - python ConfigParser object</li>
-<li>section - section in the file</li>
-<li>var - variable (key) to set</li>
-<li>value - the value to set</li>
-<li>overwrite (optional, default is False)</li>
-</ul>
-</dd>
-<dt>Returns:</dt>
-<dd><ul class="first last simple">
-<li>nothing</li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2hydro.cutMap">
-<tt class="descclassname">osm2hydro.</tt><tt class="descname">cutMap</tt><big>(</big><em>xmin</em>, <em>ymin</em>, <em>xmax</em>, <em>ymax</em>, <em>origMap</em>, <em>transMap</em><big>)</big><a class="headerlink" href="#osm2hydro.cutMap" title="Permalink to this definition">¶</a></dt>
-<dd><p>translateMap translates the tif formatted files from the srtm to PCRaster .map files
-origMap = your_map.tif
-transMap= your_map.map</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2hydro.filter_shape">
-<tt class="descclassname">osm2hydro.</tt><tt class="descname">filter_shape</tt><big>(</big><em>attribute</em>, <em>value</em>, <em>origShape</em>, <em>transShape</em><big>)</big><a class="headerlink" href="#osm2hydro.filter_shape" title="Permalink to this definition">¶</a></dt>
-<dd><p>Filters a shapefile based on a selection of and attribute/value
-attribute:      string - indicating the attribute
-value:          string - the value or comma-separated list of values of the attribute, filtered out
-origShape:      strong - location of original shapefile
-transShape:     string - location of target shapefile</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2hydro.iniFileSetUp">
-<tt class="descclassname">osm2hydro.</tt><tt class="descname">iniFileSetUp</tt><big>(</big><em>configfile</em><big>)</big><a class="headerlink" href="#osm2hydro.iniFileSetUp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads .ini file and sets default values if not present</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2hydro.projectMap">
-<tt class="descclassname">osm2hydro.</tt><tt class="descname">projectMap</tt><big>(</big><em>src_proj</em>, <em>trg_proj</em>, <em>origMap</em>, <em>transMap</em><big>)</big><a class="headerlink" href="#osm2hydro.projectMap" title="Permalink to this definition">¶</a></dt>
-<dd><p>projectMap projects a source map to a targetmap with defined srs
-src_proj = projection of source data
-trg_proj = projection of target data
-origMap = your_map.tif
-transMap= your_map.map</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2hydro.readMap">
-<tt class="descclassname">osm2hydro.</tt><tt class="descname">readMap</tt><big>(</big><em>fileName</em>, <em>fileFormat</em><big>)</big><a class="headerlink" href="#osm2hydro.readMap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read geographical file into memory</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2hydro.recursive_glob">
-<tt class="descclassname">osm2hydro.</tt><tt class="descname">recursive_glob</tt><big>(</big><em>rootdir='.'</em>, <em>suffix=''</em><big>)</big><a class="headerlink" href="#osm2hydro.recursive_glob" title="Permalink to this definition">¶</a></dt>
-<dd><p>Prepares a list of files in location rootdir, with a suffix
-input:</p>
-<blockquote>
-<div>rootdir:    string, path-name
-suffix:     suffix of required files</div></blockquote>
-<dl class="docutils">
-<dt>output:</dt>
-<dd>fileList:   list-strings, file paths and names</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2hydro.reduce_resolution">
-<tt class="descclassname">osm2hydro.</tt><tt class="descname">reduce_resolution</tt><big>(</big><em>x</em>, <em>y</em>, <em>data</em>, <em>target_resolution</em><big>)</big><a class="headerlink" href="#osm2hydro.reduce_resolution" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reduces resolution of a map (contained by x-axis, y-axis and an array) to
-a user-defined target resolution. This is done by a convolution and then picking
-one value per the amount of required resolution values.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2hydro.removeFinishedProcesses">
-<tt class="descclassname">osm2hydro.</tt><tt class="descname">removeFinishedProcesses</tt><big>(</big><em>processes</em><big>)</big><a class="headerlink" href="#osm2hydro.removeFinishedProcesses" title="Permalink to this definition">¶</a></dt>
-<dd><p>given a list of (commandString, process), 
-remove those that have completed and return the result</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2hydro.runCommands">
-<tt class="descclassname">osm2hydro.</tt><tt class="descname">runCommands</tt><big>(</big><em>commands</em>, <em>maxCpu</em><big>)</big><a class="headerlink" href="#osm2hydro.runCommands" title="Permalink to this definition">¶</a></dt>
-<dd><p>Runs a list of processes deviding
-over maxCpu</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2hydro.setlogger">
-<tt class="descclassname">osm2hydro.</tt><tt class="descname">setlogger</tt><big>(</big><em>logfilename</em>, <em>logReference</em><big>)</big><a class="headerlink" href="#osm2hydro.setlogger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set-up the logging system. Exit if this fails
-input:</p>
-<blockquote>
-<div>logfilename:    string, referring to the logfile
-logReference:   string, referring to reference used in log lines</div></blockquote>
-<dl class="docutils">
-<dt>output:</dt>
-<dd>ch:             handle, refer to logging object
-logger:         logger object</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2hydro.usage">
-<tt class="descclassname">osm2hydro.</tt><tt class="descname">usage</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#osm2hydro.usage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Print usage information</p>
-<p>&#64;param <a href="#id1"><span class="problematic" id="id2">*</span></a>args: command line arguments given</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2hydro.writeMap">
-<tt class="descclassname">osm2hydro.</tt><tt class="descname">writeMap</tt><big>(</big><em>fileName</em>, <em>fileFormat</em>, <em>x</em>, <em>y</em>, <em>data</em>, <em>FillVal</em><big>)</big><a class="headerlink" href="#osm2hydro.writeMap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write geographical data into file</p>
-</dd></dl>
-
+</div>
 </div>
 <div class="section" id="module-osm2shp">
 <span id="osm2shp"></span><h3>osm2shp<a class="headerlink" href="#module-osm2shp" title="Permalink to this headline">¶</a></h3>
@@ -618,8 +414,12 @@ Returns: length of a cell lat, length of a cell long</p>
   <ul>
 <li><a class="reference internal" href="#">Welcome to the osm2hydro Documentation</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#how-it-works">How it works</a></li>
+<li><a class="reference internal" href="#creating-the-paved-area-grids">Creating the paved area grids</a></li>
+<li><a class="reference internal" href="#combining-osm-and-srtm">Combining OSM and SRTM</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
 <li><a class="reference internal" href="#description-of-the-python-modules">Description of the python modules</a><ul>
-<li><a class="reference internal" href="#module-osm2hydro">osm2hydro</a></li>
+<li><a class="reference internal" href="#osm2hydro">osm2hydro</a></li>
 <li><a class="reference internal" href="#module-osm2shp">osm2shp</a></li>
 <li><a class="reference internal" href="#module-map2shape">map2shape</a></li>
 <li><a class="reference internal" href="#module-gdal_density">gdal_density</a></li>
@@ -632,6 +432,9 @@ Returns: length of a cell lat, length of a cell long</p>
 </li>
 </ul>
 
+  <h4>Next topic</h4>
+  <p class="topless"><a href="usage.html"
+                        title="next chapter">Using the tools</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/index.txt"
@@ -663,6 +466,9 @@ Returns: length of a cell lat, length of a cell long</p>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Using the tools"
+             >next</a> |</li>
         <li><a href="#">osm2hydro 0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
