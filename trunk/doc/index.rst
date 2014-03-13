@@ -12,12 +12,31 @@ the Shuttle Radar Topography Mission (SRTM) to
 kick-start hydrological and hydraulic modelling.
 
 
-In short the procedure first clips a region of interest from an OSM file, 
-creates shapefiles from selected features and uses those to create 
+How it works
+============
+
+First a region of interest is clipped from an OSM file. 
+From this the tools create shapefiles os selected features (OSM tags) and use
+those to create 
 gridded maps with fraction of paved area, fraction of open water and 
 fraction of unpaved area in each cell.  The tools are fully configurable 
-and can be used to generate other maps. They are available through the 
+and can be used to generate other maps. They are part of the 
 Deltares OpenEarth initiative (https://publicwiki.deltares.nl/display/OET/OpenEarth)
+and can be downloaded from goodle code at http://osm2hydro.googlecode.com)
+
+
+Additionally, we created a procedure to use OSM data in the schematisation 
+of a hydraulic overland flow model. OSM line elements that represent 
+elevated landscape features are burnt onto an elevation map. We use 
+the Shuttle Radar Topography Mission 90 meter elevation map 
+(http://www2.jpl.nasa.gov/srtm/). Such landscape features are 
+essential to include in hydraulic overland flow models as 
+they may block floods and reroute water in other directions. 
+ 
+
+
+Creating the paved area grids
+=============================
 
 The methods we have developed to extract land use maps, is divided in 
 the following steps (see also Figure 1):
@@ -43,7 +62,7 @@ urban areas in and around Liege are hardly covered (see Figure 2). As such we
 have taken the following approach to come to a best estimate of paved area in larger areas:
 
 
-.. figure:: _figs/Fig-3-liege-four.png
+.. figure:: _figs/Fig-3-liege-four.jpg
 
 Figure 3 Example of the area around Liege with a particularly poor 
 OSM coverage.  Paved area determined from Corine (top left), 
@@ -106,14 +125,15 @@ finally, the road fraction map is used to “burn in” road coverage
 over all open water and unpaved area coverage
 
 
-Additionally, we created a procedure to use OSM data in the schematisation 
-of a hydraulic overland flow model. OSM line elements that represent 
-elevated landscape features are burnt onto an elevation map. We use 
-the Shuttle Radar Topography Mission 90 meter elevation map 
-(http://www2.jpl.nasa.gov/srtm/). Such landscape features are 
-essential to include in hydraulic overland flow models as 
-they may block floods and reroute water in other directions. 
+Combining OSM and SRTM
+======================
 
+Usage
+=====
+.. toctree::
+   :maxdepth: 2
+
+   usage
 
 
 Description of the python modules
@@ -121,9 +141,13 @@ Description of the python modules
 
 osm2hydro
 ---------
+This is the main script. It needs an .ini file to retrieve it's settings
+and execute  programs and scripts.
 
-.. automodule:: osm2hydro
-	:members:
+.. toctree::
+   :maxdepth: 2
+
+   osm2hydro
 
 osm2shp
 -------
@@ -145,6 +169,7 @@ dem_filter
 .. automodule:: dem_filter
 	:members:
 	
+
 	
 	
 Indices and tables
