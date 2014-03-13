@@ -1,0 +1,21 @@
+- GD: add JIRA project (or add components/version in OpenEarth project)
+- ALL: make it a library in addition to exe
++ RB: add Arnhem land use data used in article for the comparison chart
+- ALL: add example showing comparison of land use data with Corine data
+- ALL: add example showing DEM updates / burn river (Limpopo)
++ GD: add setup.py, setup.cfg for python projects
++ GD: remove osm2shp? Use python version instead, based on GDAL
++ GD: fix all TODOs in the README
++ GD: list all requirements (including version numbers)
+- GD: remove hard-coded paths in Makefiles
++ GD: add command-line script for examples/Arnhem/
+- GD: add Makefile.am (configure) for linux
+- GD: add Visual Studio solution
+- GD: configure automated build on TeamCity
+- GD: add automated tests
++ JS: add new osmconvert version (so that pbf files are read correctly)
++ JS: add support for pbf files
+- ALL: Add documentation (sphinx)
+
+- GD: add tools to detect bridges and fix DEM based on OSM (river + road intersection)
+

@@ -1,0 +1,5 @@
+The OSM file used for the Meuse case is too large to put on the SVN systen. The file can be downloaded from:
+
+https://dl.dropboxusercontent.com/u/10134482/osm/maas.o5m.zip
+
+To run the case download the file and unpack it into this directory. Unpacked the file size is 715Mb

@@ -1,0 +1,19 @@
+25.11.2013
+
+GD: added setup.py, setup.cfg
+    integrated freeze into setup.py
+    added examples
+    added IPython Notebooks in examples
+
+14.11.2013
+
+GD: develop a visual studio solution
+GD: implemented tutorial script (IPython Notebook) for Arnhem
+
+02.10.2013
+
+JS: added python version of osm2shp.py, uses ogr2ogr from GDAL
+GD: initial source code tree in OpenEarth repository
+GD: added README
+
+
