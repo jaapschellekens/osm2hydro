@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,12 +10,12 @@
     
     <title>Welcome to the osm2hydro Documentation &mdash; osm2hydro 0.1 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
+        URL_ROOT:    '',
         VERSION:     '0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -27,23 +29,31 @@
     <link rel="next" title="Using the tools" href="usage.html" /> 
   </head>
   <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
+    <div class="header-wrapper">
+      <div class="header">
+        <div class="headertitle"><a
+          href="#">osm2hydro 0.1 documentation</a></div>
+        <div class="rel">
           <a href="usage.html" title="Using the tools"
-             accesskey="N">next</a> |</li>
-        <li><a href="#">osm2hydro 0.1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>  
+             accesskey="N">next</a> |
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
 
-    <div class="document">
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="#"><img src="_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body">
@@ -122,8 +132,8 @@ road density map a map maximum density () and a threshold value ()
 for urban areas is determined. These values are then used in a simple
 equation (for all cells &gt; ) to estimate the paved area within a cell:</p>
 <div class="math">
-<p><span class="math">paved = min : 1.0, (den^{cell} + f (den^{Max} - den^{TH}))/den^{Max}</span></p>
-</div><p>The above equation (where, <span class="math">f</span> a scaling factor is 0.75) basically generates
+<p><img src="_images/math/693b7d5672702d71c9447d4109948aa4c2e01fb9.png" alt="paved = min : 1.0, (den^{cell} + f (den^{Max} - den^{TH}))/den^{Max}"/></p>
+</div><p>The above equation (where, <img class="math" src="_images/math/bb2c93730dbb48558bb3c4738c956c4e8f816437.png" alt="f"/> a scaling factor is 0.75) basically generates
 paved area (houses etc) for all cells that have a road density higher than
 the threshold. This map (of paved area fraction) is then merged with the
 paved area map that is determined from the polygons in OpenStreetMap.
@@ -153,9 +163,6 @@ any unassigned area in the resulting maps (total coverage &lt; 1.0) is added to 
 finally, the road fraction map is used to “burn in” road coverage
 over all open water and unpaved area coverage</p>
 </div>
-<div class="section" id="combining-osm-and-srtm">
-<h2>Combining OSM and SRTM<a class="headerlink" href="#combining-osm-and-srtm" title="Permalink to this headline">¶</a></h2>
-</div>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -168,138 +175,29 @@ over all open water and unpaved area coverage</p>
 </ul>
 </div>
 </div>
-<div class="section" id="description-of-the-python-modules">
-<h2>Description of the python modules<a class="headerlink" href="#description-of-the-python-modules" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="osm2hydro">
-<h3>osm2hydro<a class="headerlink" href="#osm2hydro" title="Permalink to this headline">¶</a></h3>
+<h2>osm2hydro<a class="headerlink" href="#osm2hydro" title="Permalink to this headline">¶</a></h2>
 <p>This is the main script. It needs an .ini file to retrieve it&#8217;s settings
 and execute  programs and scripts.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="osm2hydro.html">osm2hydro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="osm2hydro.html">osm2hydro</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="osm2hydro.html#id1">OSM2hydro</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
-<div class="section" id="module-osm2shp">
-<span id="osm2shp"></span><h3>osm2shp<a class="headerlink" href="#module-osm2shp" title="Permalink to this headline">¶</a></h3>
-<dl class="docutils">
-<dt>osm2shp - convert an osm|pbf file to a set of shapefiles using ogr2ogr. Fitering</dt>
-<dd>with tags is controlled by a .ini file.</dd>
-</dl>
-<p>Usage: osm2shp.py [-h][-c configfile] -O my_osm_file.osm|pbf -o outputdir</p>
-<blockquote>
-<div><p>-O osm_file - the osm|pbf file
--o outputdir - the directory to store the output in
--h - show this information
--c configfile (default is osm2shp.ini)
--M maxproc - maximum number of ogr2ogr processes to start (default = 2)</p>
-<ul class="simple">
-<li>ogr2ogr (tested with gdal &gt;= 1.10.0)</li>
-<li>the OSM_CONFIG_FILE environment var should be set and point to
-a valid gdal osmconf.ini file</li>
+<div class="section" id="osm2shp">
+<h2>osm2shp<a class="headerlink" href="#osm2shp" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="osm2shp.html">osm2shp</a></li>
 </ul>
-<p>The ini file has a section for each shape file created:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">lu_roads_sec</span><span class="p">]</span>
-<span class="nb">type</span><span class="o">=</span><span class="n">lines</span>
-<span class="n">highway</span><span class="o">=</span><span class="n">motorway_link</span><span class="p">,</span><span class="n">secondary</span><span class="p">,</span><span class="s">&quot;road&quot;</span>
-<span class="n">aeroway</span><span class="o">=</span><span class="s">&#39;runway&#39;</span><span class="p">,</span><span class="s">&#39;taxiway&#39;</span>
-    
-<span class="p">[</span><span class="n">lu_roads_main</span><span class="p">]</span>
-<span class="nb">type</span><span class="o">=</span><span class="n">lines</span> 
-<span class="n">highway</span><span class="o">=</span><span class="s">&#39;motorway&#39;</span><span class="p">,</span><span class="s">&#39;trunk&#39;</span><span class="p">,</span><span class="s">&#39;primary&#39;</span>
-    
-    
-<span class="p">[</span><span class="n">lu_roads_small</span><span class="p">]</span>
-<span class="nb">type</span><span class="o">=</span><span class="n">lines</span>
-<span class="n">highway</span><span class="o">=</span><span class="s">&#39;footway&#39;</span><span class="p">,</span><span class="s">&#39;path&#39;</span><span class="p">,</span><span class="s">&#39;pedestrian&#39;</span><span class="p">,</span><span class="s">&#39;residential&#39;</span><span class="p">,</span><span class="s">&#39;service&#39;</span><span class="p">,</span><span class="s">&#39;tertiary&#39;</span><span class="p">,</span><span class="s">&#39;track&#39;</span><span class="p">,</span><span class="s">&#39;unclassified&#39;</span><span class="p">,</span><span class="s">&#39;cycleway&#39;</span>
-    
-<span class="p">[</span><span class="n">lu_water</span><span class="p">]</span>
-<span class="nb">type</span><span class="o">=</span><span class="n">multipolygons</span>
-<span class="n">natural</span><span class="o">=</span><span class="s">&#39;water&#39;</span><span class="p">,</span><span class="s">&#39;reservoir&#39;</span><span class="p">,</span><span class="s">&#39;basin&#39;</span><span class="p">,</span><span class="s">&#39;salt_pond&#39;</span>
-<span class="n">landuse</span><span class="o">=</span><span class="s">&#39;water&#39;</span><span class="p">,</span><span class="s">&#39;basin&#39;</span><span class="p">,</span><span class="s">&#39;reservoir&#39;</span><span class="p">,</span><span class="s">&#39;salt_pond&#39;</span>
-</pre></div>
 </div>
-</div></blockquote>
-<p>$Author: $
-$Id: $
-$Rev: $</p>
-<dl class="function">
-<dt id="osm2shp.configget">
-<tt class="descclassname">osm2shp.</tt><tt class="descname">configget</tt><big>(</big><em>log</em>, <em>config</em>, <em>section</em>, <em>var</em>, <em>default</em><big>)</big><a class="headerlink" href="#osm2shp.configget" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets a string from a config file (.ini) and returns a default value if
-the key is not found. If the key is not found it also sets the value 
-with the default in the config-file</p>
-<dl class="docutils">
-<dt>Input:</dt>
-<dd><ul class="first last simple">
-<li>config - python ConfigParser object</li>
-<li>section - section in the file</li>
-<li>var - variable (key) to get</li>
-<li>default - default string</li>
-</ul>
-</dd>
-<dt>Returns:</dt>
-<dd><ul class="first last simple">
-<li>string - either the value from the config file or the default value</li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2shp.configset">
-<tt class="descclassname">osm2shp.</tt><tt class="descname">configset</tt><big>(</big><em>config</em>, <em>section</em>, <em>var</em>, <em>value</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#osm2shp.configset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets a string in the in memory representation of the config object
-Deos NOT overwrite existing values if overwrite is set to False (default)</p>
-<dl class="docutils">
-<dt>Input:</dt>
-<dd><ul class="first last simple">
-<li>config - python ConfigParser object</li>
-<li>section - section in the file</li>
-<li>var - variable (key) to set</li>
-<li>value - the value to set</li>
-<li>overwrite (optional, default is False)</li>
-</ul>
-</dd>
-<dt>Returns:</dt>
-<dd><ul class="first last simple">
-<li>nothing</li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2shp.extractlayers_new">
-<tt class="descclassname">osm2shp.</tt><tt class="descname">extractlayers_new</tt><big>(</big><em>config</em>, <em>osmfile</em>, <em>outputdir</em>, <em>maxprocesses=2</em>, <em>ogr2ogr='ogr2ogr'</em><big>)</big><a class="headerlink" href="#osm2shp.extractlayers_new" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference external" href="http://stackoverflow.com/questions/4992400/running-several-system-commands-in-parallel">http://stackoverflow.com/questions/4992400/running-several-system-commands-in-parallel</a></p>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2shp.iniFileSetUp">
-<tt class="descclassname">osm2shp.</tt><tt class="descname">iniFileSetUp</tt><big>(</big><em>configfile</em><big>)</big><a class="headerlink" href="#osm2shp.iniFileSetUp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads .ini file and sets default values if not present</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2shp.main">
-<tt class="descclassname">osm2shp.</tt><tt class="descname">main</tt><big>(</big><em>argv=None</em><big>)</big><a class="headerlink" href="#osm2shp.main" title="Permalink to this definition">¶</a></dt>
-<dd><p>Main function, processes the command-line options, reads the config file
-and starts the extract function.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="osm2shp.mkogr2ogrstr">
-<tt class="descclassname">osm2shp.</tt><tt class="descname">mkogr2ogrstr</tt><big>(</big><em>config</em>, <em>sec</em><big>)</big><a class="headerlink" href="#osm2shp.mkogr2ogrstr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create the ogr2ogr string from a ini file to select data using 
-sql statements
-- one statement for each section
-- multiple tags per feature using a comma separated list</p>
-</dd></dl>
-
 </div>
 <div class="section" id="module-map2shape">
-<span id="map2shape"></span><h3>map2shape<a class="headerlink" href="#module-map2shape" title="Permalink to this headline">¶</a></h3>
+<span id="map2shape"></span><h2>map2shape<a class="headerlink" href="#module-map2shape" title="Permalink to this headline">¶</a></h2>
 <p>This script converts gridded river sections into a shape file. 
 Input:</p>
 <blockquote>
@@ -332,34 +230,34 @@ Y:          NumPy array, vector or 2D array of y-coordinates (target)</dd>
 
 </div>
 <div class="section" id="module-gdal_density">
-<span id="gdal-density"></span><h3>gdal_density<a class="headerlink" href="#module-gdal_density" title="Permalink to this headline">¶</a></h3>
+<span id="gdal-density"></span><h2>gdal_density<a class="headerlink" href="#module-gdal_density" title="Permalink to this headline">¶</a></h2>
 <p>Created on Fri Dec  7 15:00:29 2012</p>
-<p>&#64;author: jaap</p>
-<blockquote>
-<div><p>Usage:</p>
-<dl class="docutils">
-<dt>gdal_density -S shapefile -E extent -C cellsize -o outputfile </dt>
-<dd>-F outputformat [-r resamplefactor (default = 10)]
-[-b burnvalue (default=1)][-G True|False][-D True|False]
-[-t tempdir][-M]</dd>
-</dl>
-<p>-G Use gdalwarp instead of pcraster resample (default= False)
+<p>Usage:</p>
+<div class="highlight-python"><pre>gdal_density -S shapefile -E extent -C cellsize -o outputfile 
+             -F outputformat [-r resamplefactor (default = 10)]
+             [-b burnvalue (default=1)][-G True|False][-D True|False]
+             [-t tempdir][-M]
+
+-G Use gdalwarp instead of pcraster resample (default= False)
 -D delete high resolution files after processing (Default=True)
 -E [a,b,c,d] following gdal conventions
--t tempdir (to store the high resolution temporary files, default is the current dir</p>
-<blockquote>
-<div>or the GDAL_DENSITY_TMP environment variable)</div></blockquote>
-<p>-M if specified the burn value is assumed to be given in metres</p>
+-t tempdir (to store the high resolution temporary files, default is the current dir
+ or the GDAL_DENSITY_TMP environment variable)
+-M if specified the burn value is assumed to be given in metres</pre>
+</div>
 <p>Converts a shape to a grid. The resuling grid holds (for each cell) the 
 fraction (0-1) covered by the shapefile. The resamplefactor determines the 
 accuracy of the final results. If r is one you get a maps with only zeros and
 ones (two possibilities). If r is two you get 5 possible fractions 
 (0,0.25,0.5,0.75,1), if r is ten you get a map with 101 possible fractions 
 etc...</p>
-<p>requirements
-- gdal_warp
-- gdal_rasterize
-- pcraster 4.0 + python bindings</p>
+<p>requirements:</p>
+<blockquote>
+<div><ul class="simple">
+<li>gdal_warp</li>
+<li>gdal_rasterize</li>
+<li>pcraster 4.0 + python bindings</li>
+</ul>
 </div></blockquote>
 <dl class="function">
 <dt id="gdal_density.detDegreeLen">
@@ -384,7 +282,6 @@ Returns: length of a cell lat, length of a cell long</p>
 <dd><p>Make a map in metres to multiply with</p>
 </dd></dl>
 
-</div>
 <div class="section" id="module-dem_filter">
 <span id="dem-filter"></span><h3>dem_filter<a class="headerlink" href="#module-dem_filter" title="Permalink to this headline">¶</a></h3>
 <p>Created on Wed May 30 16:22:36 2012</p>
@@ -408,73 +305,58 @@ Returns: length of a cell lat, length of a cell long</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Welcome to the osm2hydro Documentation</a><ul>
-<li><a class="reference internal" href="#introduction">Introduction</a></li>
-<li><a class="reference internal" href="#how-it-works">How it works</a></li>
-<li><a class="reference internal" href="#creating-the-paved-area-grids">Creating the paved area grids</a></li>
-<li><a class="reference internal" href="#combining-osm-and-srtm">Combining OSM and SRTM</a></li>
-<li><a class="reference internal" href="#usage">Usage</a></li>
-<li><a class="reference internal" href="#description-of-the-python-modules">Description of the python modules</a><ul>
-<li><a class="reference internal" href="#osm2hydro">osm2hydro</a></li>
-<li><a class="reference internal" href="#module-osm2shp">osm2shp</a></li>
-<li><a class="reference internal" href="#module-map2shape">map2shape</a></li>
-<li><a class="reference internal" href="#module-gdal_density">gdal_density</a></li>
-<li><a class="reference internal" href="#module-dem_filter">dem_filter</a></li>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          <ul>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Using the tools</a></li>
 </ul>
-</li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-<li><a class="reference internal" href="#todo">TODO</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="osm2hydro.html">osm2hydro</a></li>
 </ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="osm2shp.html">osm2shp</a></li>
 </ul>
 
-  <h4>Next topic</h4>
-  <p class="topless"><a href="usage.html"
-                        title="next chapter">Using the tools</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/index.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+          <h3 style="margin-top: 1.5em;">Search</h3>
+          <form class="search" action="search.html" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Go" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+          </form>
+          <p class="searchtip" style="font-size: 90%">
+            Enter search terms or a module, class or function name.
+          </p>
         </div>
+        <div class="clearer"></div>
       </div>
-      <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
           <a href="usage.html" title="Using the tools"
-             >next</a> |</li>
-        <li><a href="#">osm2hydro 0.1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>
+             >next</a> |
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |
+          <a href="genindex.html" title="General Index"
+             >index</a>
+            <br/>
+            <a href="_sources/index.txt"
+               rel="nofollow">Show Source</a>
+        </div>
+
+        <div class="right">
+          
     <div class="footer">
         &copy; Copyright 2013, Deltares.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
   </body>
 </html>
