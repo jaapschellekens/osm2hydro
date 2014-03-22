@@ -1,8 +1,15 @@
 #!/usr/bin/env python
+
 """
-Execute the osm2hydro executable.
+OSM2hydro
+---------
+
+Execute the osm2hydro script.
 
 Usage:
+
+::
+
     osm2hydro.py  -c inifilename [-E extent][-W working dir][-C caseFolder]
                   [-N caseName][-O osm_extract_file][-F osmfile]
 
@@ -15,16 +22,22 @@ Usage:
         -O osm_extract_file
         -F osmfile
         
-Description:
+Description
+~~~~~~~~~~~
+
     osm2hydro generates hydrological and hydraulic model schematisations 
     from OpenStreetMap data
 
-Status:
+Status
+~~~~~~
+
     Still under construction by Jaap Schellekens, Hessel Winsemius, Jan Talsma, 
     Ferdinand Diermanse, Ruben Dahm, Reinder Brolsma and Daniel Tollenaar
     TODO: cleanup script, move stuff to functions
 
-Dependencies:
+Dependencies
+~~~~~~~~~~~~
+
     For osm2hydro, it is mandatory that GDAL version 1.10 or higher is installed.
     
     
@@ -54,15 +67,15 @@ Dependencies:
   --------------------------------------------------------------------
 
  Version <http://svnbook.red-bean.com/en/1.5/svn.advanced.props.special.keywords.html>
-Created: 04 Nov 2010
-Created and tested with python 2.6.5.4
+ Created: 04 Nov 2010
+ Created and tested with python 2.6.5.4
 
-$Id: OSM2hydro.py 798 2013-10-02 07:11:23Z schelle $
-$Date: 2013-10-02 09:11:23 +0200 (Wed, 02 Oct 2013) $
-$Author: schelle $
-$Revision: 798 $
-$HeadURL: https://repos.deltares.nl/repos/Hydrology/trunk/OpenStreetMaps/src/OSM2hydro/OSM2hydro.py $
-$Keywords: $
+ $Id: OSM2hydro.py 798 2013-10-02 07:11:23Z schelle $
+ $Date: 2013-10-02 09:11:23 +0200 (Wed, 02 Oct 2013) $
+ $Author: schelle $
+ $Revision: 798 $
+ $HeadURL: https://repos.deltares.nl/repos/Hydrology/trunk/OpenStreetMaps/src/OSM2hydro/OSM2hydro.py $
+ $Keywords: $
 
 """
 
@@ -97,7 +110,7 @@ def usage(*args):
     """
     Print usage information
 
-    @param *args: command line arguments given
+    @param args: command line arguments given
 
     """
     sys.stdout = sys.stderr
@@ -109,6 +122,7 @@ def usage(*args):
 
 def configget(log,config,section,var,default):
     """   
+
     Gets a string from a config file (.ini) and returns a default value if
     the key is not found. If the key is not found it also sets the value 
     with the default in the config-file
@@ -134,6 +148,7 @@ def configget(log,config,section,var,default):
     
     default = Def
     return ret       
+
 
 def configset(config,section,var,value, overwrite=False):
     """   
@@ -162,6 +177,7 @@ def configset(config,section,var,value, overwrite=False):
             if overwrite:
                 config.set(section,var,value)
 
+
 def iniFileSetUp(configfile):
     """
     Reads .ini file and sets default values if not present
@@ -174,15 +190,20 @@ def iniFileSetUp(configfile):
     config.read(configfile)
     return config
 
+
 def setlogger(logfilename, logReference):
     """
     Set-up the logging system. Exit if this fails
+    
     input:
+
         logfilename:    string, referring to the logfile
         logReference:   string, referring to reference used in log lines
+
     output:
         ch:             handle, refer to logging object
         logger:         logger object
+
     """
     try:
         #create logger
@@ -206,6 +227,7 @@ def setlogger(logfilename, logReference):
         print "ERROR: Failed to initialize logger with logfile: " + logfilename
         sys.exit(2)
 
+
 def closeLogger(logger, ch):
     """
     Closes the logger
@@ -214,6 +236,7 @@ def closeLogger(logger, ch):
     ch.flush()
     ch.close()
     return logger, ch
+
 
 def recursive_glob(rootdir='.', suffix=''):
     """
@@ -230,8 +253,18 @@ def recursive_glob(rootdir='.', suffix=''):
             for filename in filenames if filename.endswith(suffix)]
     return fileList
 
+
 def readMap(fileName, fileFormat):
-    """ Read geographical file into memory
+    """ 
+    Read geographical file into memory
+    
+    Input:
+        filename - string holding file name
+        fileFormat - a file format string according to the GDAL list of formats
+        
+    Returns:
+        x,y,data,FillVal
+        
     """
     # Open file for binary-reading
     mapFormat = gdal.GetDriverByName(fileFormat)
@@ -309,6 +342,7 @@ def cutMap(xmin, ymin, xmax, ymax, origMap,transMap):
     command= 'gdal_translate -a_nodata -32768 -ot Float32 -projwin %f %f %f %f %s %s' % (xmin, ymax, xmax, ymin, origMap, transMap)
     os.system(command)
 
+
 def projectMap(src_proj, trg_proj, origMap,transMap):
     """
     projectMap projects a source map to a targetmap with defined srs
@@ -320,6 +354,7 @@ def projectMap(src_proj, trg_proj, origMap,transMap):
     command= 'gdalwarp -s_srs "%s" -t_srs "%s" -srcnodata -32768 -dstnodata -9999 %s %s' % (src_proj, trg_proj, origMap, transMap)
     print command
     os.system(command)
+
 
 def filter_shape(attribute, value, origShape, transShape):
     """
@@ -340,6 +375,7 @@ def filter_shape(attribute, value, origShape, transShape):
     command = 'ogr2ogr -where "%s in (%s)" %s %s' % (attribute, value_string, transShape, origShape)
     os.system(command)
 
+
 def burn_lines(shapeFile, mapFile, value, x, y):
     """
     Make a map with zeros and burned in values at locations where a line shape is present
@@ -359,10 +395,12 @@ def burn_lines(shapeFile, mapFile, value, x, y):
     # run the command
     os.system(command)
 
+
 def removeFiles(wildCard):
     filelist = glob.glob(wildCard)
     for filename in filelist:
         os.unlink(filename)
+
 
 def retrieve_SRTM(url_prefix, file_prefix, url_suffix, demLoc, case, xmin, ymin, xmax, ymax, logger):
     # url_prefix=http://droppr.org/srtm/v4.1/6_5x5_TIFs/
@@ -420,6 +458,7 @@ def retrieve_SRTM(url_prefix, file_prefix, url_suffix, demLoc, case, xmin, ymin,
     os.unlink(os.path.join(demLoc, 'readme.txt'))
     os.unlink(os.path.join(demLoc, 'temp.tif'))
     return proj4string
+
 
 def reduce_resolution(x, y, data, target_resolution):
     """

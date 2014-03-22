@@ -125,9 +125,6 @@ finally, the road fraction map is used to “burn in” road coverage
 over all open water and unpaved area coverage
 
 
-Combining OSM and SRTM
-======================
-
 Usage
 =====
 .. toctree::
@@ -136,11 +133,9 @@ Usage
    usage
 
 
-Description of the python modules
-=================================
 
 osm2hydro
----------
+=========
 This is the main script. It needs an .ini file to retrieve it's settings
 and execute  programs and scripts.
 
@@ -150,17 +145,20 @@ and execute  programs and scripts.
    osm2hydro
 
 osm2shp
--------
-.. automodule:: osm2shp
-	:members:
+=======
+.. toctree::
+   :maxdepth: 2
+
+   osm2shp
 	
 map2shape
-----------
+=========
 .. automodule:: map2shape
 	:members:
+
 	
 gdal_density
-------------
+============
 .. automodule:: gdal_density
 	:members:
 	

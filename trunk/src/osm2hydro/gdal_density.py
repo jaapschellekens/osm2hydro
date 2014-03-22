@@ -1,10 +1,9 @@
 """
 Created on Fri Dec  7 15:00:29 2012
 
-@author: jaap
+Usage:
 
-
- Usage:
+:: 
 
  gdal_density -S shapefile -E extent -C cellsize -o outputfile 
               -F outputformat [-r resamplefactor (default = 10)]
@@ -15,18 +14,19 @@ Created on Fri Dec  7 15:00:29 2012
  -D delete high resolution files after processing (Default=True)
  -E [a,b,c,d] following gdal conventions
  -t tempdir (to store the high resolution temporary files, default is the current dir
-    or the GDAL_DENSITY_TMP environment variable)
+  or the GDAL_DENSITY_TMP environment variable)
  -M if specified the burn value is assumed to be given in metres
  
- Converts a shape to a grid. The resuling grid holds (for each cell) the 
- fraction (0-1) covered by the shapefile. The resamplefactor determines the 
- accuracy of the final results. If r is one you get a maps with only zeros and
- ones (two possibilities). If r is two you get 5 possible fractions 
- (0,0.25,0.5,0.75,1), if r is ten you get a map with 101 possible fractions 
- etc...
+Converts a shape to a grid. The resuling grid holds (for each cell) the 
+fraction (0-1) covered by the shapefile. The resamplefactor determines the 
+accuracy of the final results. If r is one you get a maps with only zeros and
+ones (two possibilities). If r is two you get 5 possible fractions 
+(0,0.25,0.5,0.75,1), if r is ten you get a map with 101 possible fractions 
+etc...
 
 
- requirements
+requirements:
+
  - gdal_warp
  - gdal_rasterize
  - pcraster 4.0 + python bindings
