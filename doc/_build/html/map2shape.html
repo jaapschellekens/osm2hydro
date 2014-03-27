@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using the tools &mdash; osm2hydro 0.1 documentation</title>
+    <title>map2shape &mdash; osm2hydro 0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -24,8 +24,8 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="osm2hydro 0.1 documentation" href="index.html" />
-    <link rel="next" title="osm2hydro" href="osm2hydro.html" />
-    <link rel="prev" title="Welcome to the osm2hydro Documentation" href="index.html" /> 
+    <link rel="next" title="gdal_density" href="gdal_density.html" />
+    <link rel="prev" title="osm2shp" href="osm2shp.html" /> 
   </head>
   <body>
 
@@ -43,10 +43,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="osm2hydro.html" title="osm2hydro"
+          <a href="gdal_density.html" title="gdal_density"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Welcome to the osm2hydro Documentation"
+          <a href="osm2shp.html" title="osm2shp"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
@@ -56,24 +56,15 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Using the tools</a><ul>
-<li><a class="reference internal" href="#using-the-command-line-scripts">Using the command-line scripts</a></li>
-<li><a class="reference internal" href="#using-the-tools-from-within-python">Using the tools from within python</a></li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Welcome to the osm2hydro Documentation</a></p>
+  <p class="topless"><a href="osm2shp.html"
+                        title="previous chapter">osm2shp</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="osm2hydro.html"
-                        title="next chapter">osm2hydro</a></p>
+  <p class="topless"><a href="gdal_density.html"
+                        title="next chapter">gdal_density</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="_sources/usage.txt"
+    <li><a href="_sources/map2shape.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -97,14 +88,37 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="using-the-tools">
-<h1>Using the tools<a class="headerlink" href="#using-the-tools" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="using-the-command-line-scripts">
-<h2>Using the command-line scripts<a class="headerlink" href="#using-the-command-line-scripts" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="using-the-tools-from-within-python">
-<h2>Using the tools from within python<a class="headerlink" href="#using-the-tools-from-within-python" title="Permalink to this headline">¶</a></h2>
-</div>
+  <div class="section" id="module-map2shape">
+<span id="map2shape"></span><h1>map2shape<a class="headerlink" href="#module-map2shape" title="Permalink to this headline">¶</a></h1>
+<p>This script converts gridded river sections into a shape file.</p>
+<p>Input:</p>
+<blockquote>
+<div>rivermap:       PCRaster map, containing the river sections as integers
+drainmap:       Accumulated drainage map over the pixels, contained in rivermap.__add__</div></blockquote>
+<p>Both inputs are produced by a script called &#8216;srtm_burn_process.bat&#8217; (no shell-version available yet)
+This script can be run from within srtm_burn_process.bat eventually</p>
+<dl class="function">
+<dt id="map2shape.convertCoord">
+<tt class="descclassname">map2shape.</tt><tt class="descname">convertCoord</tt><big>(</big><em>proj_src</em>, <em>proj_trg</em>, <em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#map2shape.convertCoord" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a list of x,y pairs in a certain projection to another projection</p>
+<p>input:</p>
+<blockquote>
+<div>proj_src:   string, EPSG or proj4 string referring to projection of source coordinates
+proj_trg:   string, EPSG or proj4 string referring to projection of target coordinates
+x:          NumPy array, vector or 2D array of x-coordinates (source)
+y:          NumPy array, vector or 2D array of y-coordinates (source)</div></blockquote>
+<p>output:</p>
+<blockquote>
+<div>X:          NumPy array, vector or 2D array of x-coordinates (target)
+Y:          NumPy array, vector or 2D array of y-coordinates (target)</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="map2shape.readMap">
+<tt class="descclassname">map2shape.</tt><tt class="descname">readMap</tt><big>(</big><em>fileName</em>, <em>fileFormat</em><big>)</big><a class="headerlink" href="#map2shape.readMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read geographical file into memory</p>
+</dd></dl>
+
 </div>
 
 
@@ -123,10 +137,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="osm2hydro.html" title="osm2hydro"
+          <a href="gdal_density.html" title="gdal_density"
              >next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Welcome to the osm2hydro Documentation"
+          <a href="osm2shp.html" title="osm2shp"
              >previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>

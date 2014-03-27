@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -15,7 +13,7 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
+        URL_ROOT:    './',
         VERSION:     '0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -31,7 +29,7 @@
   <body>
 
 <div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
-<a href="#"><img src="_static/logo.png" border="0" alt="py4sci"/></a>
+<a href="#"><img src="_static/logo.jpg" border="0" alt="py4sci"/></a>
 </div>
 
     <div class="related">
@@ -60,20 +58,12 @@
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#how-it-works">How it works</a></li>
 <li><a class="reference internal" href="#creating-the-paved-area-grids">Creating the paved area grids</a></li>
-<li><a class="reference internal" href="#usage">Usage</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#osm2hydro">osm2hydro</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#osm2shp">osm2shp</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-map2shape">map2shape</a></li>
-<li><a class="reference internal" href="#module-gdal_density">gdal_density</a><ul>
-<li><a class="reference internal" href="#module-dem_filter">dem_filter</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#osm2hydro">osm2hydro</a></li>
+<li><a class="reference internal" href="#osm2shp">osm2shp</a></li>
+<li><a class="reference internal" href="#map2shape">map2shape</a></li>
+<li><a class="reference internal" href="#gdal-density">gdal_density</a></li>
+<li><a class="reference internal" href="#dem-filter">dem_filter</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 <li><a class="reference internal" href="#todo">TODO</a></li>
 </ul>
@@ -150,24 +140,16 @@ a standard tool which we use unaltered</li>
 (OSM2hydro, <a class="reference external" href="https://publicwiki.deltares.nl/display/OET/OpenEarth">https://publicwiki.deltares.nl/display/OET/OpenEarth</a>)</li>
 </ol>
 <div class="figure">
-<img alt="_images/Fig-1-schematic.png" src="_images/Fig-1-schematic.png" />
+<a class="reference internal image-reference" href="_images/Fig-1-schematic.png"><img alt="_images/Fig-1-schematic.png" src="_images/Fig-1-schematic.png" style="width: 440.0px; height: 380.0px;" /></a>
 </div>
 <p>Figure 1 Flow chart of the steps taken to derive land use
 (and specifically paved area fraction) maps from OSM</p>
 <p>In some areas the different land-use polygons nearly cover the whole area.
 As such, the LU polygons can be used to generate the paved, unpaved and
 water covered area maps we are aiming to derive. However, in large areas
-(also in Western Europe) the coverage is (very) incomplete. For example,
-urban areas in and around Liege are hardly covered (see Figure 2). As such we
-have taken the following approach to come to a best estimate of paved area in larger areas:</p>
-<div class="figure">
-<img alt="_images/Fig-3-liege-four.jpg" src="_images/Fig-3-liege-four.jpg" />
-</div>
-<p>Figure 3 Example of the area around Liege with a particularly poor
-OSM coverage.  Paved area determined from Corine (top left),
-paved area as estimated from OSM coverage indicating paved land use (top right),
-paved land use estimated from road density (bottom left) and a
-merger of the two OSM-derived estimates</p>
+(also in Western Europe) the coverage is (very) incomplete. As such we
+have taken the following approach to come to a best estimate of paved area in l
+arger areas:</p>
 <p>After the polygons have been extracted from the OSM file the first step is
 to generate high resolution grids from the shape files. The high resolution
 grids by default have a 10 times higher resolution in both the X and Y
@@ -178,13 +160,13 @@ to generate a (high resolution) grid in which the width is used to
 calculate the fraction covered by roads (assuming the road crossed that
 cell in a straight line). At the same time a road-density map is
 calculated using the same information but in which all roads have a unit width.
-From the density maps and a configurable percentile (default 90%) in the
+From the density maps and a configurable percentile in the
 road density map a map maximum density () and a threshold value ()
 for urban areas is determined. These values are then used in a simple
 equation (for all cells &gt; ) to estimate the paved area within a cell:</p>
 <div class="math">
-<p><img src="_images/math/693b7d5672702d71c9447d4109948aa4c2e01fb9.png" alt="paved = min : 1.0, (den^{cell} + f (den^{Max} - den^{TH}))/den^{Max}"/></p>
-</div><p>The above equation (where, <img class="math" src="_images/math/bb2c93730dbb48558bb3c4738c956c4e8f816437.png" alt="f"/> a scaling factor is 0.75) basically generates
+<p><img src="_images/math/074bef26fd8f5ec8419c75c983e694cc61217778.png" alt="paved = min : 1.0, (den^{cell} + f (den^{Max} - den^{TH}))/den^{Max}"/></p>
+</div><p>The above equation (where, <img class="math" src="_images/math/0001d02b63ede2fe3219e05a7cd09c82ae6298b6.png" alt="f"/> a scaling factor is 0.75) basically generates
 paved area (houses etc) for all cells that have a road density higher than
 the threshold. This map (of paved area fraction) is then merged with the
 paved area map that is determined from the polygons in OpenStreetMap.
@@ -210,7 +192,8 @@ fraction map and the roads fraction maps are correct using the following steps:<
 coverage the surplus is subtracted from the unpaved fraction map</p>
 <p>If the resulting total cover is larger than 1 it is assumed that the
 unpaved polygons are correct and the surplus is subtracted from the paved area
-any unassigned area in the resulting maps (total coverage &lt; 1.0) is added to the unpaved fraction map
+any unassigned area in the resulting maps (total coverage &lt; 1.0) is added to
+the unpaved fraction map
 finally, the road fraction map is used to “burn in” road coverage
 over all open water and unpaved area coverage</p>
 </div>
@@ -247,96 +230,28 @@ and execute  programs and scripts.</p>
 </ul>
 </div>
 </div>
-<div class="section" id="module-map2shape">
-<span id="map2shape"></span><h2>map2shape<a class="headerlink" href="#module-map2shape" title="Permalink to this headline">¶</a></h2>
-<p>This script converts gridded river sections into a shape file. 
-Input:</p>
-<blockquote>
-<div>rivermap:       PCRaster map, containing the river sections as integers
-drainmap:       Accumulated drainage map over the pixels, contained in rivermap.__add__</div></blockquote>
-<p>Both inputs are produced by a script called &#8216;srtm_burn_process.bat&#8217; (no shell-version available yet)
-This script can be run from within srtm_burn_process.bat eventually</p>
-<dl class="function">
-<dt id="map2shape.convertCoord">
-<tt class="descclassname">map2shape.</tt><tt class="descname">convertCoord</tt><big>(</big><em>proj_src</em>, <em>proj_trg</em>, <em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#map2shape.convertCoord" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a list of x,y pairs in a certain projection to another projection
-input:</p>
-<blockquote>
-<div>proj_src:   string, EPSG or proj4 string referring to projection of source coordinates
-proj_trg:   string, EPSG or proj4 string referring to projection of target coordinates
-x:          NumPy array, vector or 2D array of x-coordinates (source)
-y:          NumPy array, vector or 2D array of y-coordinates (source)</div></blockquote>
-<dl class="docutils">
-<dt>output:</dt>
-<dd>X:          NumPy array, vector or 2D array of x-coordinates (target)
-Y:          NumPy array, vector or 2D array of y-coordinates (target)</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="map2shape.readMap">
-<tt class="descclassname">map2shape.</tt><tt class="descname">readMap</tt><big>(</big><em>fileName</em>, <em>fileFormat</em><big>)</big><a class="headerlink" href="#map2shape.readMap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read geographical file into memory</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-gdal_density">
-<span id="gdal-density"></span><h2>gdal_density<a class="headerlink" href="#module-gdal_density" title="Permalink to this headline">¶</a></h2>
-<p>Created on Fri Dec  7 15:00:29 2012</p>
-<p>Usage:</p>
-<div class="highlight-python"><pre>gdal_density -S shapefile -E extent -C cellsize -o outputfile 
-             -F outputformat [-r resamplefactor (default = 10)]
-             [-b burnvalue (default=1)][-G True|False][-D True|False]
-             [-t tempdir][-M]
-
--G Use gdalwarp instead of pcraster resample (default= False)
--D delete high resolution files after processing (Default=True)
--E [a,b,c,d] following gdal conventions
--t tempdir (to store the high resolution temporary files, default is the current dir
- or the GDAL_DENSITY_TMP environment variable)
--M if specified the burn value is assumed to be given in metres</pre>
-</div>
-<p>Converts a shape to a grid. The resuling grid holds (for each cell) the 
-fraction (0-1) covered by the shapefile. The resamplefactor determines the 
-accuracy of the final results. If r is one you get a maps with only zeros and
-ones (two possibilities). If r is two you get 5 possible fractions 
-(0,0.25,0.5,0.75,1), if r is ten you get a map with 101 possible fractions 
-etc...</p>
-<p>requirements:</p>
-<blockquote>
-<div><ul class="simple">
-<li>gdal_warp</li>
-<li>gdal_rasterize</li>
-<li>pcraster 4.0 + python bindings</li>
+<div class="section" id="map2shape">
+<h2>map2shape<a class="headerlink" href="#map2shape" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="map2shape.html">map2shape</a></li>
 </ul>
-</div></blockquote>
-<dl class="function">
-<dt id="gdal_density.detDegreeLen">
-<tt class="descclassname">gdal_density.</tt><tt class="descname">detDegreeLen</tt><big>(</big><em>metres</em><big>)</big><a class="headerlink" href="#gdal_density.detDegreeLen" title="Permalink to this definition">¶</a></dt>
-<dd><p>in length in metres
-out length in degree</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="gdal_density.lattometres">
-<tt class="descclassname">gdal_density.</tt><tt class="descname">lattometres</tt><big>(</big><em>lat</em><big>)</big><a class="headerlink" href="#gdal_density.lattometres" title="Permalink to this definition">¶</a></dt>
-<dd><p>&#8221;
-Determines the length of one degree lat/long at a given latitude (in meter).
-Code taken from <a class="reference external" href="http:www.nga.mil/MSISiteContent/StaticFiles/Calculators/degree.html">http:www.nga.mil/MSISiteContent/StaticFiles/Calculators/degree.html</a>
-Input: map with lattitude values for each cell
-Returns: length of a cell lat, length of a cell long</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="gdal_density.makeMultMap">
-<tt class="descclassname">gdal_density.</tt><tt class="descname">makeMultMap</tt><big>(</big><em>outfile</em>, <em>pcrout</em>, <em>metres</em>, <em>gdal_translate='gdal_translate'</em><big>)</big><a class="headerlink" href="#gdal_density.makeMultMap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make a map in metres to multiply with</p>
-</dd></dl>
-
-<div class="section" id="module-dem_filter">
-<span id="dem-filter"></span><h3>dem_filter<a class="headerlink" href="#module-dem_filter" title="Permalink to this headline">¶</a></h3>
-<p>Created on Wed May 30 16:22:36 2012</p>
-<p>&#64;author: Hessel Winsemius</p>
+</div>
+</div>
+<div class="section" id="gdal-density">
+<h2>gdal_density<a class="headerlink" href="#gdal-density" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gdal_density.html">gdal_density</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="dem-filter">
+<h2>dem_filter<a class="headerlink" href="#dem-filter" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dem_filter.html">dem_filter</a></li>
+</ul>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
@@ -376,8 +291,8 @@ Returns: length of a cell lat, length of a cell long</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2013, Deltares.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        &copy; Copyright 2013, 2014 Hesssel Winsemius, Jaap Schellekens, Gennadii Donchyts.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

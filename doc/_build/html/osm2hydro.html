@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -15,7 +13,7 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
+        URL_ROOT:    './',
         VERSION:     '0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -32,7 +30,7 @@
   <body>
 
 <div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
-<a href="index.html"><img src="_static/logo.png" border="0" alt="py4sci"/></a>
+<a href="index.html"><img src="_static/logo.jpg" border="0" alt="py4sci"/></a>
 </div>
 
     <div class="related">
@@ -109,7 +107,7 @@
 <h2>OSM2hydro<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>Execute the osm2hydro script.</p>
 <p>Usage:</p>
-<div class="highlight-python"><pre>osm2hydro.py  -c inifilename [-E extent][-W working dir][-C caseFolder]
+<div class="highlight-python"><div class="highlight"><pre>osm2hydro.py  -c inifilename [-E extent][-W working dir][-C caseFolder]
               [-N caseName][-O osm_extract_file][-F osmfile]
 
 -c inifilename
@@ -119,7 +117,8 @@ Optional (overrides the ini settings):
     -C caseFolder
     -N caseName
     -O osm_extract_file
-    -F osmfile</pre>
+    -F osmfile
+</pre></div>
 </div>
 <div class="section" id="description">
 <h3>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h3>
@@ -137,42 +136,7 @@ TODO: cleanup script, move stuff to functions</div></blockquote>
 <div class="section" id="dependencies">
 <h3>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><blockquote>
 <div>For osm2hydro, it is mandatory that GDAL version 1.10 or higher is installed.</div></blockquote>
-<dl class="docutils">
-<dt>Copyright notice</dt>
-<dd><dl class="first docutils">
-<dt>Copyright (C) 2012 Deltares, contact</dt>
-<dd><p class="first">H.(Hessel) C. Winsemius</p>
-<p><a class="reference external" href="mailto:hessel&#46;winsemius&#37;&#52;&#48;deltares&#46;nl">hessel<span>&#46;</span>winsemius<span>&#64;</span>deltares<span>&#46;</span>nl</a></p>
-<p class="last">Rotterdamseweg 185
-Delft
-The Netherlands</p>
-</dd>
-</dl>
-<p>This function is free software under the PBL-Deltares MoU: redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation, either
-version 2.1 of the License, or (at your option) any later version.</p>
-<p>This library is distributed in the hope that &#8216;it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.</p>
-<p class="last">You should have received a copy of the GNU Lesser General Public
-License along with this library. If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;.
-&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;</p>
-</dd>
-</dl>
-<p>Version &lt;<a class="reference external" href="http://svnbook.red-bean.com/en/1.5/svn.advanced.props.special.keywords.html">http://svnbook.red-bean.com/en/1.5/svn.advanced.props.special.keywords.html</a>&gt;
-Created: 04 Nov 2010
-Created and tested with python 2.6.5.4</p>
-<p>$Id: OSM2hydro.py 798 2013-10-02 07:11:23Z schelle $
-$Date: 2013-10-02 09:11:23 +0200 (Wed, 02 Oct 2013) $
-$Author: schelle $
-$Revision: 798 $
-$HeadURL: <a class="reference external" href="https://repos.deltares.nl/repos/Hydrology/trunk/OpenStreetMaps/src/OSM2hydro/OSM2hydro.py">https://repos.deltares.nl/repos/Hydrology/trunk/OpenStreetMaps/src/OSM2hydro/OSM2hydro.py</a> $
-$Keywords: $</p>
-</div></blockquote>
 <dl class="function">
 <dt id="osm2hydro.burn_lines">
 <tt class="descclassname">osm2hydro.</tt><tt class="descname">burn_lines</tt><big>(</big><em>shapeFile</em>, <em>mapFile</em>, <em>value</em>, <em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#osm2hydro.burn_lines" title="Permalink to this definition">¶</a></dt>
@@ -286,15 +250,14 @@ fileFormat - a file format string according to the GDAL list of formats</dd>
 <dl class="function">
 <dt id="osm2hydro.recursive_glob">
 <tt class="descclassname">osm2hydro.</tt><tt class="descname">recursive_glob</tt><big>(</big><em>rootdir='.'</em>, <em>suffix=''</em><big>)</big><a class="headerlink" href="#osm2hydro.recursive_glob" title="Permalink to this definition">¶</a></dt>
-<dd><p>Prepares a list of files in location rootdir, with a suffix
-input:</p>
+<dd><p>Prepares a list of files in location rootdir, with a suffix</p>
+<p>input:</p>
 <blockquote>
 <div>rootdir:    string, path-name
 suffix:     suffix of required files</div></blockquote>
-<dl class="docutils">
-<dt>output:</dt>
-<dd>fileList:   list-strings, file paths and names</dd>
-</dl>
+<p>output:</p>
+<blockquote>
+<div>fileList:   list-strings, file paths and names</div></blockquote>
 </dd></dl>
 
 <dl class="function">
@@ -378,8 +341,8 @@ logger:         logger object</dd>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2013, Deltares.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        &copy; Copyright 2013, 2014 Hesssel Winsemius, Jaap Schellekens, Gennadii Donchyts.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

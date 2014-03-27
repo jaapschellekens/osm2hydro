@@ -48,7 +48,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'osm2hydro'
-copyright = u'2013, Deltares'
+copyright = u'2013, 2014 Hesssel Winsemius, Jaap Schellekens, Gennadii Donchyts'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
