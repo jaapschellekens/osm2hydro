@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 """
-Execute the osm2hydro executable.
+Execute the osm2hydro script.  Experimental version with different units. At some stage this can run at the global level
 
 Usage:
-    osm2hydro.py  -c inifilename [-E extent][-W working dir][-C caseFolder]
+    osm2hydro_matres.py  -c inifilename [-E extent][-W working dir][-C caseFolder]
                   [-N caseName][-O osm_extract_file][-F osmfile]
 
     -c inifilename
@@ -52,10 +52,6 @@ Dependencies:
   You should have received a copy of the GNU Lesser General Public
   License along with this library. If not, see <http://www.gnu.org/licenses/>.
   --------------------------------------------------------------------
-
- Version <http://svnbook.red-bean.com/en/1.5/svn.advanced.props.special.keywords.html>
-Created: 04 Nov 2010
-Created and tested with python 2.6.5.4
 
 $Id: osm2hydro_metres.py 9857 2013-12-09 13:48:11Z schelle $
 $Date: 2013-12-09 14:48:11 +0100 (Mon, 09 Dec 2013) $
