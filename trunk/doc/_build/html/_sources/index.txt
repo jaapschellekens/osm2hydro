@@ -50,6 +50,7 @@ the following steps (see also Figure 1):
    (OSM2hydro, https://publicwiki.deltares.nl/display/OET/OpenEarth)
 
 .. figure:: _figs/Fig-1-schematic.png
+    :scale: 50 %
 
 Figure 1 Flow chart of the steps taken to derive land use 
 (and specifically paved area fraction) maps from OSM
@@ -57,18 +58,9 @@ Figure 1 Flow chart of the steps taken to derive land use
 In some areas the different land-use polygons nearly cover the whole area. 
 As such, the LU polygons can be used to generate the paved, unpaved and 
 water covered area maps we are aiming to derive. However, in large areas 
-(also in Western Europe) the coverage is (very) incomplete. For example, 
-urban areas in and around Liege are hardly covered (see Figure 2). As such we 
-have taken the following approach to come to a best estimate of paved area in larger areas:
-
-
-.. figure:: _figs/Fig-3-liege-four.jpg
-
-Figure 3 Example of the area around Liege with a particularly poor 
-OSM coverage.  Paved area determined from Corine (top left), 
-paved area as estimated from OSM coverage indicating paved land use (top right), 
-paved land use estimated from road density (bottom left) and a 
-merger of the two OSM-derived estimates
+(also in Western Europe) the coverage is (very) incomplete. As such we 
+have taken the following approach to come to a best estimate of paved area in l
+arger areas:
 
 After the polygons have been extracted from the OSM file the first step is 
 to generate high resolution grids from the shape files. The high resolution 
@@ -80,7 +72,7 @@ to generate a (high resolution) grid in which the width is used to
 calculate the fraction covered by roads (assuming the road crossed that 
 cell in a straight line). At the same time a road-density map is 
 calculated using the same information but in which all roads have a unit width.  
-From the density maps and a configurable percentile (default 90%) in the 
+From the density maps and a configurable percentile in the 
 road density map a map maximum density () and a threshold value () 
 for urban areas is determined. These values are then used in a simple 
 equation (for all cells > ) to estimate the paved area within a cell:	
@@ -120,7 +112,8 @@ coverage the surplus is subtracted from the unpaved fraction map
 
 If the resulting total cover is larger than 1 it is assumed that the 
 unpaved polygons are correct and the surplus is subtracted from the paved area
-any unassigned area in the resulting maps (total coverage < 1.0) is added to the unpaved fraction map
+any unassigned area in the resulting maps (total coverage < 1.0) is added to 
+the unpaved fraction map
 finally, the road fraction map is used to “burn in” road coverage 
 over all open water and unpaved area coverage
 
@@ -150,22 +143,29 @@ osm2shp
    :maxdepth: 2
 
    osm2shp
+
 	
 map2shape
 =========
-.. automodule:: map2shape
-	:members:
+.. toctree::
+   :maxdepth: 2
+
+   map2shape
 
 	
 gdal_density
 ============
-.. automodule:: gdal_density
-	:members:
+.. toctree::
+   :maxdepth: 2
+
+   gdal_density
 	
 dem_filter
------------
-.. automodule:: dem_filter
-	:members:
+==========
+.. toctree::
+   :maxdepth: 2
+
+   dem_filter
 	
 
 	

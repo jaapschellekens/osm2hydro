@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using the tools &mdash; osm2hydro 0.1 documentation</title>
+    <title>gdal_density &mdash; osm2hydro 0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -24,8 +24,8 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="osm2hydro 0.1 documentation" href="index.html" />
-    <link rel="next" title="osm2hydro" href="osm2hydro.html" />
-    <link rel="prev" title="Welcome to the osm2hydro Documentation" href="index.html" /> 
+    <link rel="next" title="dem_filter" href="dem_filter.html" />
+    <link rel="prev" title="map2shape" href="map2shape.html" /> 
   </head>
   <body>
 
@@ -43,10 +43,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="osm2hydro.html" title="osm2hydro"
+          <a href="dem_filter.html" title="dem_filter"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Welcome to the osm2hydro Documentation"
+          <a href="map2shape.html" title="map2shape"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
@@ -56,24 +56,15 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Using the tools</a><ul>
-<li><a class="reference internal" href="#using-the-command-line-scripts">Using the command-line scripts</a></li>
-<li><a class="reference internal" href="#using-the-tools-from-within-python">Using the tools from within python</a></li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Welcome to the osm2hydro Documentation</a></p>
+  <p class="topless"><a href="map2shape.html"
+                        title="previous chapter">map2shape</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="osm2hydro.html"
-                        title="next chapter">osm2hydro</a></p>
+  <p class="topless"><a href="dem_filter.html"
+                        title="next chapter">dem_filter</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="_sources/usage.txt"
+    <li><a href="_sources/gdal_density.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -97,14 +88,60 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="using-the-tools">
-<h1>Using the tools<a class="headerlink" href="#using-the-tools" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="using-the-command-line-scripts">
-<h2>Using the command-line scripts<a class="headerlink" href="#using-the-command-line-scripts" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="module-gdal_density">
+<span id="gdal-density"></span><h1>gdal_density<a class="headerlink" href="#module-gdal_density" title="Permalink to this headline">¶</a></h1>
+<p>Created on Fri Dec  7 15:00:29 2012</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre>gdal_density -S shapefile -E extent -C cellsize -o outputfile 
+             -F outputformat [-r resamplefactor (default = 10)]
+             [-b burnvalue (default=1)][-G True|False][-D True|False]
+             [-t tempdir][-M]
+
+-G Use gdalwarp instead of pcraster resample (default= False)
+-D delete high resolution files after processing (Default=True)
+-E [a,b,c,d] following gdal conventions
+-t tempdir (to store the high resolution temporary files, default is the current dir
+ or the GDAL_DENSITY_TMP environment variable)
+-M if specified the burn value is assumed to be given in metres
+</pre></div>
 </div>
-<div class="section" id="using-the-tools-from-within-python">
-<h2>Using the tools from within python<a class="headerlink" href="#using-the-tools-from-within-python" title="Permalink to this headline">¶</a></h2>
-</div>
+<p>Converts a shape to a grid. The resuling grid holds (for each cell) the 
+fraction (0-1) covered by the shapefile. The resamplefactor determines the 
+accuracy of the final results. If r is one you get a maps with only zeros and
+ones (two possibilities). If r is two you get 5 possible fractions 
+(0,0.25,0.5,0.75,1), if r is ten you get a map with 101 possible fractions 
+etc...</p>
+<p>requirements:</p>
+<blockquote>
+<div><ul class="simple">
+<li>gdal_warp</li>
+<li>gdal_rasterize</li>
+<li>pcraster 4.0 + python bindings</li>
+</ul>
+</div></blockquote>
+<dl class="function">
+<dt id="gdal_density.detDegreeLen">
+<tt class="descclassname">gdal_density.</tt><tt class="descname">detDegreeLen</tt><big>(</big><em>metres</em><big>)</big><a class="headerlink" href="#gdal_density.detDegreeLen" title="Permalink to this definition">¶</a></dt>
+<dd><p>in length in metres
+out length in degree</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gdal_density.lattometres">
+<tt class="descclassname">gdal_density.</tt><tt class="descname">lattometres</tt><big>(</big><em>lat</em><big>)</big><a class="headerlink" href="#gdal_density.lattometres" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#8221;
+Determines the length of one degree lat/long at a given latitude (in meter).
+Code taken from <a class="reference external" href="http:www.nga.mil/MSISiteContent/StaticFiles/Calculators/degree.html">http:www.nga.mil/MSISiteContent/StaticFiles/Calculators/degree.html</a>
+Input: map with lattitude values for each cell
+Returns: length of a cell lat, length of a cell long</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gdal_density.makeMultMap">
+<tt class="descclassname">gdal_density.</tt><tt class="descname">makeMultMap</tt><big>(</big><em>outfile</em>, <em>pcrout</em>, <em>metres</em>, <em>gdal_translate='gdal_translate'</em><big>)</big><a class="headerlink" href="#gdal_density.makeMultMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a map in metres to multiply with</p>
+</dd></dl>
+
 </div>
 
 
@@ -123,10 +160,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="osm2hydro.html" title="osm2hydro"
+          <a href="dem_filter.html" title="dem_filter"
              >next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Welcome to the osm2hydro Documentation"
+          <a href="map2shape.html" title="map2shape"
              >previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
