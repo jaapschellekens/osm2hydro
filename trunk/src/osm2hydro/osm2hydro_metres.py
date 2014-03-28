@@ -28,30 +28,6 @@ Dependencies:
     For osm2hydro, it is mandatory that GDAL version 1.10 or higher is installed.
     
     
- Copyright notice
-  --------------------------------------------------------------------
-  Copyright (C) 2012 Deltares, contact
-      H.(Hessel) C. Winsemius
-
-      hessel.winsemius@deltares.nl
-
-      Rotterdamseweg 185
-      Delft
-      The Netherlands
-
-  This function is free software under the PBL-Deltares MoU: redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation, either
-  version 2.1 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that 'it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
-
-  You should have received a copy of the GNU Lesser General Public
-  License along with this library. If not, see <http://www.gnu.org/licenses/>.
-  --------------------------------------------------------------------
 
 $Id: osm2hydro_metres.py 9857 2013-12-09 13:48:11Z schelle $
 $Date: 2013-12-09 14:48:11 +0100 (Mon, 09 Dec 2013) $
@@ -59,6 +35,34 @@ $Author: schelle $
 $Revision: 9857 $
 $HeadURL: https://svn.oss.deltares.nl/repos/openearthtools/trunk/python/applications/osm2hydro/src/osm2hydro/osm2hydro_metres.py $
 $Keywords: $
+
+"""
+
+"""
+ Copyright notice
+
+    Copyright 2013, 2014 Hesssel Winsemius, Jaap Schellekens, Gennadii Donchyts
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+
+ $Id: OSM2hydro.py 798 2013-10-02 07:11:23Z schelle $
+ $Date: 2013-10-02 09:11:23 +0200 (Wed, 02 Oct 2013) $
+ $Author: schelle $
+ $Revision: 798 $
+ $HeadURL: https://repos.deltares.nl/repos/Hydrology/trunk/OpenStreetMaps/src/OSM2hydro/OSM2hydro.py $
+ $Keywords: $
 
 """
 
