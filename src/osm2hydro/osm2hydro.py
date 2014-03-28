@@ -40,35 +40,27 @@ Dependencies
 
     For osm2hydro, it is mandatory that GDAL version 1.10 or higher is installed.
     
-    
+
+"""
+
+"""
  Copyright notice
-  --------------------------------------------------------------------
-  Copyright (C) 2012 Deltares, contact
-      H.(Hessel) C. Winsemius
 
-      hessel.winsemius@deltares.nl
+    Copyright 2013, 2014 Hesssel Winsemius, Jaap Schellekens, Gennadii Donchyts
 
-      Rotterdamseweg 185
-      Delft
-      The Netherlands
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-  This function is free software under the PBL-Deltares MoU: redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation, either
-  version 2.1 of the License, or (at your option) any later version.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-  This library is distributed in the hope that 'it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
-
-  You should have received a copy of the GNU Lesser General Public
-  License along with this library. If not, see <http://www.gnu.org/licenses/>.
-  --------------------------------------------------------------------
-
- Version <http://svnbook.red-bean.com/en/1.5/svn.advanced.props.special.keywords.html>
- Created: 04 Nov 2010
- Created and tested with python 2.6.5.4
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
 
  $Id: OSM2hydro.py 798 2013-10-02 07:11:23Z schelle $
  $Date: 2013-10-02 09:11:23 +0200 (Wed, 02 Oct 2013) $
@@ -241,10 +233,14 @@ def closeLogger(logger, ch):
 def recursive_glob(rootdir='.', suffix=''):
     """
     Prepares a list of files in location rootdir, with a suffix
+    
     input:
+
         rootdir:    string, path-name
         suffix:     suffix of required files
+
     output:
+
         fileList:   list-strings, file paths and names
     """
 

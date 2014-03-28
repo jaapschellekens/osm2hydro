@@ -1,12 +1,42 @@
 #!/usr/bin/env python
 """
 This script converts gridded river sections into a shape file. 
+
 Input:
+
     rivermap:       PCRaster map, containing the river sections as integers
     drainmap:       Accumulated drainage map over the pixels, contained in rivermap.__add__
     
 Both inputs are produced by a script called 'srtm_burn_process.bat' (no shell-version available yet)
 This script can be run from within srtm_burn_process.bat eventually
+"""
+
+"""
+ Copyright notice
+
+    Copyright 2013, 2014 Hesssel Winsemiuss
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+
+ $Id: OSM2hydro.py 798 2013-10-02 07:11:23Z schelle $
+ $Date: 2013-10-02 09:11:23 +0200 (Wed, 02 Oct 2013) $
+ $Author: schelle $
+ $Revision: 798 $
+ $HeadURL: https://repos.deltares.nl/repos/Hydrology/trunk/OpenStreetMaps/src/OSM2hydro/OSM2hydro.py $
+ $Keywords: $
+
 """
 
 import csv
@@ -22,7 +52,8 @@ import pdb
 import os
 
 def readMap(fileName, fileFormat):
-    """ Read geographical file into memory
+    """ 
+    Read geographical file into memory
     """
     # Open file for binary-reading
     mapFormat = gdal.GetDriverByName(fileFormat)
@@ -53,12 +84,16 @@ def readMap(fileName, fileFormat):
 def convertCoord(proj_src, proj_trg, x, y):
     """
     Convert a list of x,y pairs in a certain projection to another projection
+
     input:
+
         proj_src:   string, EPSG or proj4 string referring to projection of source coordinates
         proj_trg:   string, EPSG or proj4 string referring to projection of target coordinates
         x:          NumPy array, vector or 2D array of x-coordinates (source)
         y:          NumPy array, vector or 2D array of y-coordinates (source)
+
     output:
+
         X:          NumPy array, vector or 2D array of x-coordinates (target)
         Y:          NumPy array, vector or 2D array of y-coordinates (target)
     """
