@@ -15,14 +15,13 @@ kick-start hydrological and hydraulic modelling.
 How it works
 ============
 
-First a region of interest is clipped from an OSM file. 
-From this the tools create shapefiles os selected features (OSM tags) and use
-those to create 
-gridded maps with fraction of paved area, fraction of open water and 
+From an OSM file the tools create shapefiles of selected features (OSM tags) and use
+those to create  gridded maps with fraction of paved area, fraction of open water and 
 fraction of unpaved area in each cell.  The tools are fully configurable 
 and can be used to generate other maps. They are part of the 
 Deltares OpenEarth initiative (https://publicwiki.deltares.nl/display/OET/OpenEarth)
-and can be downloaded from goodle code at http://osm2hydro.googlecode.com)
+and can be downloaded from google code at http://osm2hydro.googlecode.com) where this
+documentation is also hosted (http://osm2hydro.googlecode.com/svn/trunk/doc/_build/html/index.html).
 
 
 Additionally, we created a procedure to use OSM data in the schematisation 
