@@ -287,6 +287,8 @@ def readMap(fileName, fileFormat):
     ds = None
     return x, y, data, FillVal
 
+
+
 def writeMap(fileName, fileFormat, x, y, data, FillVal):
     """ Write geographical data into file"""
 
@@ -328,6 +330,8 @@ def writeMap(fileName, fileFormat, x, y, data, FillVal):
 
     if verbose:
         print 'Writing to ' + fileName + ' is done!'
+
+
 
 def cutMap(xmin, ymin, xmax, ymax, origMap,transMap):
     """
@@ -526,7 +530,7 @@ def main(opts):
     osmExtractName = None
     osmFileName = None
     workFolder   = os.path.dirname(__file__) # location of osm2hydro.py
-
+    avg_if_pavedfromroads = 0.8
     extent = None
     
     for o, a in opts:
@@ -752,6 +756,9 @@ def main(opts):
     width_waterway_drain=float(configget(logger,config,'osm','width_waterway_drain',str(width_waterway_drain)))
     width_waterway_ditch=float(configget(logger,config,'osm','width_waterway_ditch',str(width_waterway_ditch)))
     above_is_paved=float(configget(logger,config,'osm','above_is_paved',str(above_is_paved)))
+    pavedpolmult=float(configget(logger,config,'osm','pavedpolmult',"1.0"))
+    unpavedpolmult=float(configget(logger,config,'osm','unpavedpolmult',"1.0"))
+    maskmap=str(configget(logger,config,'osm','maskmap.map',"None"))
     
     """ Read configuration file done!!!"""
     # No convertt to size for the hires grid
@@ -921,8 +928,8 @@ def main(opts):
             gdal_density.main(['-S',lu_roads_small_shp,'-b',"1",'-E',str('[%f,%f,%f,%f]') % (xmin, ymin, xmax, ymax),'-C',str(resolution),'-o', lu_roads_small_tif + "_den.tif" , '-F', 'GTiff','-r',str(resamp_grid_method)])        
         else:
             gdal_density.main(['-G','True','-S',lu_water_shp,'-E',str('[%f,%f,%f,%f]') % (xmin, ymin, xmax, ymax),'-C',str(resolution),'-o', lu_water_tif, '-F', 'GTiff','-r',str(resamp_grid_method)])
-            gdal_density.main(['-G','True','-S',lu_paved_shp,'-E',str('[%f,%f,%f,%f]') % (xmin, ymin, xmax, ymax),'-C',str(resolution),'-o', lu_paved_tif, '-F', 'GTiff','-r',str(resamp_grid_method)])
-            gdal_density.main(['-G','True','-S',lu_unpaved_shp,'-E',str('[%f,%f,%f,%f]') % (xmin, ymin, xmax, ymax),'-C',str(resolution),'-o', lu_unpaved_tif, '-F', 'GTiff','-r',str(resamp_grid_method)])
+            gdal_density.main(['-G','True','-S',lu_paved_shp,'-b',str(pavedpolmult),'-E',str('[%f,%f,%f,%f]') % (xmin, ymin, xmax, ymax),'-C',str(resolution),'-o', lu_paved_tif, '-F', 'GTiff','-r',str(resamp_grid_method)])
+            gdal_density.main(['-G','True','-S',lu_unpaved_shp,'-b',str(unpavedpolmult),'-E',str('[%f,%f,%f,%f]') % (xmin, ymin, xmax, ymax),'-C',str(resolution),'-o', lu_unpaved_tif, '-F', 'GTiff','-r',str(resamp_grid_method)])
             gdal_density.main(['-G','True','-S',lu_waterway_river_shp,'-b',str(width_waterway_river),'-E',str('[%f,%f,%f,%f]') % (xmin, ymin, xmax, ymax),'-C',str(resolution),'-o', lu_waterway_river_tif, '-F', 'GTiff','-r',str(resamp_grid_method)])
             gdal_density.main(['-G','True','-S',lu_waterway_riverbank_shp,'-b',str(width_waterway_riverbank),'-E',str('[%f,%f,%f,%f]') % (xmin, ymin, xmax, ymax),'-C',str(resolution),'-o', lu_waterway_riverbank_tif, '-F', 'GTiff','-r',str(resamp_grid_method)])
             gdal_density.main(['-G','True','-S',lu_waterway_stream_shp,'-b',str(width_waterway_stream),'-E',str('[%f,%f,%f,%f]') % (xmin, ymin, xmax, ymax),'-C',str(resolution),'-o', lu_waterway_stream_tif, '-F', 'GTiff','-r',str(resamp_grid_method)])
@@ -978,7 +985,7 @@ def main(opts):
         alturb_idx = roads_den >= urbover
         alturb     = np.zeros((lu_water.shape))
         alturb[alturb_idx] = np.minimum(1.0 * (roads_den[alturb_idx] + 0.75 *(urbovermax-urbover)) /urbovermax,1.0)
-        alturb = 0.8 * alturb
+        alturb = avg_if_pavedfromroads * alturb
     
         global srs
         ds = gdal.Open(lu_water_tif, gdal.GA_ReadOnly)

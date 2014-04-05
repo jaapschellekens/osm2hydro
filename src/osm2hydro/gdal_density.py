@@ -17,7 +17,7 @@ Usage:
   or the GDAL_DENSITY_TMP environment variable)
  -M if specified the burn value is assumed to be given in metres
  
-Converts a shape to a grid. The resuling grid holds (for each cell) the 
+Converts a shape to a grid. The resulting grid holds (for each cell) the
 fraction (0-1) covered by the shapefile. The resamplefactor determines the 
 accuracy of the final results. If r is one you get a maps with only zeros and
 ones (two possibilities). If r is two you get 5 possible fractions 
@@ -122,7 +122,7 @@ def detDegreeLen(metres):
 
 def makeMultMap(outfile,pcrout,metres,gdal_translate="gdal_translate"):
     """
-    Make a map in metres to multiply with
+    Make a map in metres to multiply with and perform the multiplication
     """
     
      # Metres
@@ -214,7 +214,6 @@ def main(argv=None):
             if verbose:
                 print "starting: " + exestr
             
-            #exestr = gdal_rasterize + " -ts " + str(xcount) + " " + str(ycount) + " -te " + str(extent[0]) + " " + str(extent[1]) + " " + str(extent[2]) + " " + str(extent[3]) + " -burn " + str(burn) + "  -tr " + str(hirescellsize) + " " + str(hirescellsize) + " " + poly_ds + " " + outfilehires        
             os.system(exestr)
         
         if resamplewithgdal:
