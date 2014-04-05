@@ -1,7 +1,7 @@
 - GD: add JIRA project (or add components/version in OpenEarth project)
-- ALL: make it a library in addition to exe
++ ALL: make it a library in addition to exe
 + RB: add Arnhem land use data used in article for the comparison chart
-- ALL: add example showing comparison of land use data with Corine data
++ ALL: add example showing comparison of land use data with Corine data
 - ALL: add example showing DEM updates / burn river (Limpopo)
 + GD: add setup.py, setup.cfg for python projects
 + GD: remove osm2shp? Use python version instead, based on GDAL
@@ -15,7 +15,7 @@
 - GD: add automated tests
 + JS: add new osmconvert version (so that pbf files are read correctly)
 + JS: add support for pbf files
-- ALL: Add documentation (sphinx)
-
++ ALL: Add documentation (sphinx)
++ ALL: Move double code to a function library
 - GD: add tools to detect bridges and fix DEM based on OSM (river + road intersection)
 

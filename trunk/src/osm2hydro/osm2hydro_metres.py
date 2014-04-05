@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """
-Execute the osm2hydro script.  Experimental version with different units. At some stage this can run at the global level
+Execute the osm2hydro script.  Experimental version with different units. At some stage
+this can run at the global level
 
 Usage:
     osm2hydro_matres.py  -c inifilename [-E extent][-W working dir][-C caseFolder]

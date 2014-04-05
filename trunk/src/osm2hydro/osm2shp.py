@@ -1,24 +1,29 @@
 """
-osm2shp - convert an osm|pbf file to a set of shapefiles using ogr2ogr. Fitering
-          with tags is controlled by a .ini file.
+osm2shp - convert an osm|pbf file to a set of shapefiles using ogr2ogr. Filtering with tags is controlled by a .ini file.
 
-Usage: osm2shp.py [-h][-c configfile] -O my_osm_file.osm|pbf -o outputdir
+Usage:
+
+::
+
+  osm2shp.py [-h][-c configfile] -O my_osm_file.osm|pbf -o outputdir
 
   -O osm_file - the osm|pbf file
   -o outputdir - the directory to store the output in
   -h - show this information
   -c configfile (default is osm2shp.ini)
   -M maxproc - maximum number of ogr2ogr processes to start (default = 2)
-  
-  dependencies
-  ~~~~~~~~~~~~
+
+
+dependencies
+~~~~~~~~~~~~
+
   - ogr2ogr (tested with gdal >= 1.10.0)
-  - the OSM_CONFIG_FILE environment var should be set and point to
-    a valid gdal osmconf.ini file
+  - the OSM_CONFIG_FILE environment var should be set and point to a valid gdal osmconf.ini file
   
-  ini file
-  ~~~~~~~~
-  The ini file has a section for each shape file created:
+ini file
+~~~~~~~~
+
+The ini file has a section for each shape file created:
 
   ::
 

@@ -56,6 +56,15 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">osm2shp</a><ul>
+<li><a class="reference internal" href="#dependencies">dependencies</a></li>
+<li><a class="reference internal" href="#ini-file">ini file</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="osm2hydro.html"
                         title="previous chapter">osm2hydro</a></p>
@@ -94,20 +103,30 @@
 <dt>osm2shp - convert an osm|pbf file to a set of shapefiles using ogr2ogr. Fitering</dt>
 <dd>with tags is controlled by a .ini file.</dd>
 </dl>
-<p>Usage: osm2shp.py [-h][-c configfile] -O my_osm_file.osm|pbf -o outputdir</p>
-<blockquote>
-<div><p>-O osm_file - the osm|pbf file
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre>osm2shp.py [-h][-c configfile] -O my_osm_file.osm|pbf -o outputdir
+
+-O osm_file - the osm|pbf file
 -o outputdir - the directory to store the output in
 -h - show this information
 -c configfile (default is osm2shp.ini)
--M maxproc - maximum number of ogr2ogr processes to start (default = 2)</p>
-<ul class="simple">
+-M maxproc - maximum number of ogr2ogr processes to start (default = 2)
+</pre></div>
+</div>
+<div class="section" id="dependencies">
+<h2>dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
 <li>ogr2ogr (tested with gdal &gt;= 1.10.0)</li>
-<li>the OSM_CONFIG_FILE environment var should be set and point to
-a valid gdal osmconf.ini file</li>
+<li>the OSM_CONFIG_FILE environment var should be set and point to a valid gdal osmconf.ini file</li>
 </ul>
+</div></blockquote>
+</div>
+<div class="section" id="ini-file">
+<h2>ini file<a class="headerlink" href="#ini-file" title="Permalink to this headline">¶</a></h2>
 <p>The ini file has a section for each shape file created:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">lu_roads_sec</span><span class="p">]</span>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">lu_roads_sec</span><span class="p">]</span>
 <span class="nb">type</span><span class="o">=</span><span class="n">lines</span>
 <span class="n">highway</span><span class="o">=</span><span class="n">motorway_link</span><span class="p">,</span><span class="n">secondary</span><span class="p">,</span><span class="s">&quot;road&quot;</span>
 <span class="n">aeroway</span><span class="o">=</span><span class="s">&#39;runway&#39;</span><span class="p">,</span><span class="s">&#39;taxiway&#39;</span>
@@ -205,6 +224,7 @@ sql statements
 - multiple tags per feature using a comma separated list</p>
 </dd></dl>
 
+</div>
 </div>
 
 
