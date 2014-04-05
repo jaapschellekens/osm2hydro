@@ -57,7 +57,7 @@ Figure 1 Flow chart of the steps taken to derive land use
 In some areas the different OSM land-use polygons nearly cover the whole area.
 In those places the LU polygons can be used to generate the paved, unpaved and
 water covered area maps we are aiming to derive. However, in large areas 
-the coverage is (very) incomplete. osm2hydro can use the information of the raod network, which
+the coverage is (very) incomplete. osm2hydro can use the information of the road network, which
 is usually nearly complete to estimate urban and or paved areas. The steps taken in the script are described below
 (see the code for details).
 
