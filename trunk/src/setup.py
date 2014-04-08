@@ -44,7 +44,7 @@ osm2hydro consist of a set of tools used to generate input for water-related mod
       author='Hessel Winsemius',
       author_email='hessel.winsemius@deltares.nl',
       url='http://osm2hydro.googlecode.com',
-      license='LGPL',
+      license='GPL',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
       zip_safe=True,
