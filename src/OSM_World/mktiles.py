@@ -35,43 +35,43 @@ Runtime
 import ConfigParser, sys, os, getopt
 import time, subprocess, shlex
 
-    def removeFinishedProcesses(processes):
-        """ given a list of (commandString, process),
-            remove those that have completed and return the result
-        """
-        newProcs = []
-        for pollCmd, pollProc in processes:
-            retCode = pollProc.poll()
-            if retCode==None:
-                # still running
-                newProcs.append((pollCmd, pollProc))
-            elif retCode!=0:
-                # failed
-                raise Exception("Command %s failed" % pollCmd)
-            else:
-                print "Command %s completed successfully" % pollCmd
-        return newProcs
+def removeFinishedProcesses(processes):
+    """ given a list of (commandString, process),
+        remove those that have completed and return the result
+    """
+    newProcs = []
+    for pollCmd, pollProc in processes:
+        retCode = pollProc.poll()
+        if retCode==None:
+            # still running
+            newProcs.append((pollCmd, pollProc))
+        elif retCode!=0:
+            # failed
+            raise Exception("Command %s failed" % pollCmd)
+        else:
+            print "Command %s completed successfully" % pollCmd
+    return newProcs
 
-    def runCommands(commands, maxCpu):
-        """
-        Runs a list of processes deviding
-        over maxCpu
-        """
-        processes = []
-        for command in commands:
-            command = command.replace('\\','/') # otherwise shlex.split removes all path separators
-            proc =  subprocess.Popen(shlex.split(command))
-            procTuple = (command, proc)
-            processes.append(procTuple)
-            while len(processes) >= maxCpu:
-                time.sleep(.2)
-                processes = removeFinishedProcesses(processes)
-
-        # wait for all processes
-        while len(processes)>0:
-            time.sleep(0.5)
+def runCommands(commands, maxCpu):
+    """
+    Runs a list of processes deviding
+    over maxCpu
+    """
+    processes = []
+    for command in commands:
+        command = command.replace('\\','/') # otherwise shlex.split removes all path separators
+        proc =  subprocess.Popen(shlex.split(command))
+        procTuple = (command, proc)
+        processes.append(procTuple)
+        while len(processes) >= maxCpu:
+            time.sleep(.2)
             processes = removeFinishedProcesses(processes)
-        print "All processes (" + str(len(commands)) + ") completed."
+
+    # wait for all processes
+    while len(processes)>0:
+        time.sleep(0.5)
+        processes = removeFinishedProcesses(processes)
+    print "All processes (" + str(len(commands)) + ") completed."
 
 
 
@@ -153,7 +153,8 @@ def read_splitter_areas(fname):
     
     00000002: -985088,5818368 to -387072,7188480
     #       : -21.137695,124.848633 to -8.305664,154.248047
-    
+    00000281: 2396160,337920 to 2430976,362496
+    #       : 51.416016,7.250977 to 52.163086,7.778320
     """
     def my_split(s, seps):
         res = [s]
@@ -166,7 +167,10 @@ def read_splitter_areas(fname):
     ret = []
     fs = open(fname,'r')
     # Convert the splitter map units back to decimal degree
-    corconv = 360.0/2.0**24
+    corconv = 360.0/2.0**24.0
+    #convdev = round(((1 << 24) / 360.0),6)
+    # Unfortunately this is neede in soem cases .....
+    overlap = 0.008333333333  * 0.5
     
     for line in fs:
         if '#' not in line:  
@@ -177,8 +181,17 @@ def read_splitter_areas(fname):
                     new.append(it.strip())
                 new =[]
                 new.append(zz[0])
+                nr = 0
                 for it in zz[1:len(zz)]:
-                    new.append(int(it) * corconv)
+                    nr = nr + 1
+                    if nr == 1:
+                        new.append(round(int(it) * corconv - overlap,6) )
+                    if nr == 2:
+                        new.append(round(int(it) * corconv - overlap,6) )
+                    if nr == 3:
+                        new.append(round(int(it) * corconv + overlap,6) )
+                    if nr == 4:
+                        new.append(round(int(it) * corconv + overlap,6) )
                     
                 ret.append(new)    
     fs.close()   
@@ -206,6 +219,8 @@ def main(argv=None):
     opts, args = getopt.getopt(sys.argv[1:], 'I:')
     configfile = "planet.ini"
 
+    maxCPU = 4 # For osmconvert
+
     for o, a in opts:
         print o, a
         if o == '-I': configfile = a
@@ -224,6 +239,7 @@ def main(argv=None):
     # Main loop
     #----------------------------------
     start=1 # to keep track of the number of tiles between splitter runs
+    commands=[]
     # Loop over all regions (define by the boundary polygons)
     for poly in boundaries:
         # Use osmconvert to cut out a pbf for the polygon if is not already esists
@@ -231,12 +247,13 @@ def main(argv=None):
         if not os.path.exists(poly+".pbf"):
             print "Cutting " + osmfile + " using polygon : " + poly
             execstr = osmconvert + " " + osmfile +" -o="+poly+".pbf -B=" + poly + " -v  --out-pbf --hash-memory=1000 --drop-broken-refs  --drop-version --drop-relations --complex-ways --complete-ways --drop-author"
-            ret = os.system(execstr)
-            if ret:
-                print "Error, command returned non zero exit code:" + str(ret)
-                exit(ret)
+            commands.append(execstr)
+            #ret = os.system(execstr)
+
         else:
             print "Skipping extracting polygon cutout from planet: " + poly+ ".pbf"
+
+    runCommands(commands,maxCPU)
 
     for poly in boundaries:
         thisodir = outputdir + "_" + poly
@@ -252,10 +269,13 @@ def main(argv=None):
         #start=int(res[-1][0]) + 1
 
 
+
+
     for poly in boundaries:
+        commands =[]
         thisodir = outputdir + "_" + poly
         # now run OSM2hydro for each tile
-        osm2hydrocmd=[]
+
         res = read_splitter_areas(os.path.join(thisodir,"areas.list"))
         start=int(res[-1][0]) + 1
         print "Last tile number: " + str(start)
@@ -273,18 +293,21 @@ def main(argv=None):
                 osm2hydrostr = osm2hydro + " -N " + tilefile + " -C " + thisodir+ " -c " + osm2ini + "  -E [" + str(xmin) +"," + str(ymin) + "," + str(xmax) + "," + str(ymax) +"] -O  " + thisodir+   "/" + str(tilefile) + ".osm.pbf"
                 print "Starting: " + osm2hydrostr
                 ret = os.system(osm2hydrostr)
+                #commands.append(osm2hydrostr)
                 if ret:
-                    print "Error, command returned non zero exit code:" + str(ret)
-                    exit(ret)
+                   print "Error, command returned non zero exit code:" + str(ret)
+                   exit(ret)
             else:
                 print "Skipping osm2hydro for tile: " + str(tile)
 
+        #runCommands(commands,4)
 
 
     exit()
     mergefiles = ["roads_den.tif","lu_paved.tif","lu_pavedpol.tif","lu_water.tif","lu_unpaved.tif","lu_roads.tif"]
 
 
+    # This is unix specific. Reprogram in python......
     for mf in mergefiles:
         print "merging " + mf + "....."
         execstr = "gdal_merge.py -co 'COMPRESS=PACKBITS' -o merge_" + mf + " `find . -name " + mf + "`"
@@ -293,7 +316,6 @@ def main(argv=None):
             print "Error, command returned non zero exit code:" + str(ret)
             exit(ret)
 
-    #CAN WE USE 0cutline in gdalworp??
 
     # Now make a catchment mask
     execstr ="pcrcalc mask.map = " + mergefiles[0] + "* 0.0"
