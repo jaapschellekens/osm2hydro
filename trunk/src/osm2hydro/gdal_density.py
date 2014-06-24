@@ -62,7 +62,7 @@ import pdb
 from pcraster import *
 import osgeo.osr as osr
 import osgeo.gdal as gdal
-
+import math
 
 def usage(*args):
     sys.stdout = sys.stderr
@@ -100,13 +100,13 @@ def lattometres(lat):
     
 
 
-def detDegreeLen(metres):
+def detDegreeLen(metres,map):
     """
     in length in metres
     out length in degree
     """
     
-    aa = ycoordinate(boolean(cover(1)))
+    aa = ycoordinate(boolean(map + 1.0))
     yl, xl = lattometres(aa)
        
     xl = metres/xl
@@ -128,9 +128,9 @@ def makeMultMap(outfile,pcrout,metres,gdal_translate="gdal_translate"):
      # Metres
     os.system(gdal_translate + " -of PCRaster " + outfile + " " + pcrout)
     setclone(pcrout)
-    
-    reallength = detDegreeLen(metres)
-    orgmap = readmap(pcrout) 
+    orgmap = readmap(pcrout)
+    reallength = detDegreeLen(metres,orgmap)
+
     ttmap = os.path.join(os.path.dirname(pcrout),"_tt.map")
     report(orgmap * reallength/celllength(),ttmap)
     os.system(gdal_translate + " -of PCRaster " + ttmap + " " + outfile)
@@ -203,8 +203,13 @@ def main(argv=None):
     hirescellsize = cellsize/rsamp
     pcroutfilehires= outfilehires + ".map"
     pcroutfile=outfile + ".map"
+    width = (extent[2]-extent[0])/cellsize
+    height = (extent[3]-extent[1])/cellsize
+    width = int(math.ceil(width))
+    height = int(math.ceil(height))
 
     if lyr.GetFeatureCount() > 0:
+
         if burninmetres:
             exestr = gdal_rasterize + " -tr " + str(hirescellsize) + " " + str(hirescellsize) + " -te " + str(extent[0]) + " " + str(extent[1]) + " " + str(extent[2]) + " " + str(extent[3]) + " -burn " + str(1.0 * rsamp) + " " + poly_ds + " " + outfilehires
             os.system(exestr)
@@ -217,7 +222,10 @@ def main(argv=None):
             os.system(exestr)
         
         if resamplewithgdal:
-            os.system(gdal_warp + " -ot Float32 -r average -tr "+ str(cellsize) + " " + str(cellsize) + " " + outfilehires + ' ' + outfile)
+            execstr = gdal_warp + " -ot Float32 -r average -ts " + str(width) + " " + str(height) + " -te " + str(extent[0]) + " " + str(extent[1]) + " " + str(extent[2]) + " " + str(extent[3]) + " " + outfilehires + ' ' + outfile
+            os.execstr_org = gdal_warp + " -ot Float32 -r average -tr "+ str(cellsize) + " " + str(cellsize) + " " + outfilehires + ' ' + outfile
+
+            os.system(execstr)
             if burninmetres:
                 makeMultMap(outfile,"_temp.map",burn,gdal_translate="gdal_translate")
         else:
@@ -230,12 +238,9 @@ def main(argv=None):
         
         if delete_hires:
             os.remove(outfilehires)
-    else: # create an empty file
-        width = int((extent[2]-extent[0])/cellsize)
-        height = int((extent[3]-extent[1])/cellsize) 
+    else: # create an empty file9
         geotransform = (extent[0], hirescellsize, 0.0, extent[1], 0.0, -hirescellsize)
         raster = gdal.GetDriverByName('GTiff')
-
         ds2 = raster.Create(outfile, width, height, 1, gdal.GDT_Float32)
         ds2.SetGeoTransform(geotransform)
         ds2.GetRasterBand(1).SetNoDataValue(0.0)

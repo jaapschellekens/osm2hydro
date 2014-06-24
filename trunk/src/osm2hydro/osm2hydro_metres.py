@@ -90,6 +90,7 @@ import dem_filter
 import pdb
 import scipy.signal as signal
 import map2shape
+import multiprocessing
 
 debuglog = True
 srs = None
@@ -491,6 +492,7 @@ def main(opts):
     caseName = None
     osmExtractName = None
     osmFileName = None
+    avg_if_pavedfromroads = 0.8
     workFolder   = os.path.dirname(__file__) # location of osm2hydro.py
 
     extent = None
@@ -504,7 +506,9 @@ def main(opts):
         if o == '-N': caseName =  a
         if o == '-O': osmExtractName =  a
         if o == '-F': osmFileName =  a
-    
+
+
+    print "+++++++++++++++++++++" + osmExtractName
     if configFile == None:
          usage()
          sys.exit(2) 
@@ -683,7 +687,14 @@ def main(opts):
     except:
         logger.error( 'Config file "' + configFile + '" does not exist or is improperly formatted.')
         sys.exit(2)
-        
+
+    print "========================================"
+    print xmin
+    print ymin
+    print xmax
+    print xmax
+    print extent
+
     # Override ini file settings with command-line options
     if extent != None:
         #[xmin, ymin, xmax, ymax]
@@ -691,7 +702,11 @@ def main(opts):
         ymin = extent[1]
         xmax = extent[2]
         ymax = extent[3]
-    
+    print "========================================"
+    print xmin
+    print ymin
+    print xmax
+    print xmax
 
     if configget(logger,config,'osm','poly',str(method_poly)) == 'True':
         method_poly=True
@@ -718,7 +733,10 @@ def main(opts):
     width_waterway_drain=float(configget(logger,config,'osm','width_waterway_drain',str(width_waterway_drain)))
     width_waterway_ditch=float(configget(logger,config,'osm','width_waterway_ditch',str(width_waterway_ditch)))
     above_is_paved=float(configget(logger,config,'osm','above_is_paved',str(above_is_paved)))
-    
+    pavedpolmult=float(configget(logger,config,'osm','pavedpolmult',"1.0"))
+    unpavedpolmult=float(configget(logger,config,'osm','unpavedpolmult',"1.0"))
+    maskmap=str(configget(logger,config,'osm','maskmap.map',"None"))
+ 
     """ Read configuration file done!!!"""
     # No convertt to size for the hires grid
 #    width_road_main=width_road_main*resamp_grid_method
@@ -799,10 +817,13 @@ def main(opts):
           print command
 
           #command = str('%s %s --drop-broken-refs  -v  -b="%f,%f,%f,%f" -o=%s') % (osmconvert_exe, osmFile, xmin, ymin, xmax, ymax, osmExtract)
-          os.system(command)
+          ret = os.system(command)
+          if ret:
+              logger.error("Command returned no zero code: " +  str(ret))
           osmFile = osmExtract
         else:
           logger.info("Skipping osm extraction...")
+          osmFile = osmExtract
           
           
         if not SkipShapes:
@@ -886,6 +907,7 @@ def main(opts):
             gdal_density.main(['-S',lu_roads_sec_shp,'-b',"1",'-E',str('[%f,%f,%f,%f]') % (xmin, ymin, xmax, ymax),'-C',str(resolution),'-o', lu_roads_sec_tif + "_den.tif", '-F', 'GTiff','-r',str(resamp_grid_method)])
             gdal_density.main(['-S',lu_roads_small_shp,'-b',"1",'-E',str('[%f,%f,%f,%f]') % (xmin, ymin, xmax, ymax),'-C',str(resolution),'-o', lu_roads_small_tif + "_den.tif" , '-F', 'GTiff','-r',str(resamp_grid_method)])        
         else:
+            #p = multiprocessing.Process(target=gdal_density.main,args=)
             gdal_density.main(['-G','True','-S',lu_water_shp,'-E',str('[%f,%f,%f,%f]') % (xmin, ymin, xmax, ymax),'-C',str(resolution),'-o', lu_water_tif, '-F', 'GTiff','-r',str(resamp_grid_method)])
             gdal_density.main(['-G','True','-S',lu_paved_shp,'-E',str('[%f,%f,%f,%f]') % (xmin, ymin, xmax, ymax),'-C',str(resolution),'-o', lu_paved_tif, '-F', 'GTiff','-r',str(resamp_grid_method)])
             gdal_density.main(['-G','True','-S',lu_unpaved_shp,'-E',str('[%f,%f,%f,%f]') % (xmin, ymin, xmax, ymax),'-C',str(resolution),'-o', lu_unpaved_tif, '-F', 'GTiff','-r',str(resamp_grid_method)])
@@ -939,12 +961,18 @@ def main(opts):
             lu_roads_total = lu_roads_small + lu_roads_sec + lu_roads_main
 
         ## determine percentile  (above %) of road density
-        urbover = np.percentile(roads_den,above_is_paved)
+        fixedtreshold = True
+        if fixedtreshold:
+            urbover_perc = np.percentile(roads_den,above_is_paved)
+            urbover = 0.77
+            logger.info("Percentile density: " + str(urbover_perc) + " Fixed density: " + str(urbover))
+        else:
+            urbover = np.percentile(roads_den,above_is_paved)
         urbovermax = np.max(roads_den)
         alturb_idx = roads_den >= urbover
         alturb     = np.zeros((lu_water.shape))
         alturb[alturb_idx] = np.minimum(1.0 * (roads_den[alturb_idx] + 0.75 *(urbovermax-urbover)) /urbovermax,1.0)
-        alturb = 0.8 * alturb
+        alturb = avg_if_pavedfromroads * alturb
     
         global srs
         ds = gdal.Open(lu_water_tif, gdal.GA_ReadOnly)
