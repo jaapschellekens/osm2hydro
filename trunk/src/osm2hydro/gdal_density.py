@@ -186,10 +186,10 @@ def main(argv=None):
             return()
     
     if tmpdir is not ".":
-      tmpdir=tempfile.mkdtemp(prefix=tmpdir)
+      tmpdir=tempfile.mkdtemp(dir=tmpdir)
       outfilehires = os.path.join(tmpdir,os.path.basename(outfile + "_hires.tif"))
     else:
-      tmpdir=tempfile.mkdtemp(prefix=tmpdir)
+      tmpdir=tempfile.mkdtemp(dir=tmpdir)
       outfilehires = outfile + "_hires.tif"
 
     tempfile.mkdtemp(prefix=tmpdir)
