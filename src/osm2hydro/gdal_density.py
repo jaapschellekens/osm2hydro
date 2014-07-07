@@ -187,10 +187,10 @@ def main(argv=None):
     
     if tmpdir is not ".":
       tmp_name=tempfile.mkstemp(dir=tmpdir)
-      outfilehires = os.path.join(tmpdir,os.path.basename(tmp_name + outfile + "_hires.tif"))
+      outfilehires = tmp_name  "_hires.tif"
     else:
       tmp_name=tempfile.mkstemp(dir=tmpdir)
-      outfilehires = tmp_name + outfile + "_hires.tif"
+      outfilehires = tmp_name +  "_hires.tif"
 
     tempfile.mkdtemp(prefix=tmpdir)
       
