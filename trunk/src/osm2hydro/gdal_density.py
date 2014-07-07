@@ -63,6 +63,7 @@ from pcraster import *
 import osgeo.osr as osr
 import osgeo.gdal as gdal
 import math
+import tempfile
 
 def usage(*args):
     sys.stdout = sys.stderr
@@ -185,9 +186,13 @@ def main(argv=None):
             return()
     
     if tmpdir is not ".":
+      tmpdir=tempfile.mkdtemp(prefix=tmpdir)
       outfilehires = os.path.join(tmpdir,os.path.basename(outfile + "_hires.tif"))
     else:
+      tmpdir=tempfile.mkdtemp(prefix=tmpdir)
       outfilehires = outfile + "_hires.tif"
+
+    tempfile.mkdtemp(prefix=tmpdir)
       
     print "gdal_density starting with options: " + str(argv)
     print "tmpdir: " + tmpdir
