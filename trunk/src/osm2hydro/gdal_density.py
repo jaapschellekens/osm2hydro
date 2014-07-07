@@ -187,7 +187,7 @@ def main(argv=None):
     
     if tmpdir is not ".":
       tmp_name=tempfile.mkstemp(dir=tmpdir)
-      outfilehires = tmp_name  "_hires.tif"
+      outfilehires = tmp_name  + "_hires.tif"
     else:
       tmp_name=tempfile.mkstemp(dir=tmpdir)
       outfilehires = tmp_name +  "_hires.tif"
