@@ -244,7 +244,9 @@ def extractlayers_new(config,osmfile,outputdir,maxprocesses=2,ogr2ogr="ogr2ogr")
             os.remove(outputdir + "/" + sec + ".dbf")
             os.remove(outputdir + "/" + sec + ".prj")
             os.remove(outputdir + "/" + sec + ".shx")
-        thestr = ogr2ogr + " -f \"ESRI Shapefile\"  --config OGR_INTERLEAVED_READING YES " + outputdir + "/" + sec + ".shp " + osmfile + " " + thestr 
+        thestr = ogr2ogr + " -f \"ESRI Shapefile\"  --config OGR_INTERLEAVED_READING YES " + outputdir + "/" + sec + ".shp " + osmfile + " " + thestr
+
+        print thestr
         commands.append(thestr)
 
 
