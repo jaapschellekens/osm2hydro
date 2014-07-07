@@ -830,7 +830,6 @@ def main(opts):
           logger.info("Creating shapes...")
           #command = osm2shp_exe + ' -c ' + osmConfig + ' -d ' + osmshapesLoc + ' ' + osmFile
           if os.path.isfile(osmFile):
-              logger.info("------------- calling osm2shp")
               osm2shp.main(['-o',osmshapesLoc,'-O',osmFile,'-c',osmConfig,'-M',maxCPU])
           else:
               logger.error('OSM extract file "' + osmFile + '" is not available, closing...');closeLogger(logger, ch);sys.exit(2)
