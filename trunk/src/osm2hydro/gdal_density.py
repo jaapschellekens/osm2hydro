@@ -132,9 +132,12 @@ def makeMultMap(outfile,pcrout,metres,gdal_translate="gdal_translate"):
     orgmap = readmap(pcrout)
     reallength = detDegreeLen(metres,orgmap)
 
-    ttmap = os.path.join(os.path.dirname(pcrout),"_tt.map")
+    #ttmap = os.path.join(os.path.dirname(pcrout),"_tt.map")
+    tmp_name=tempfile.mkstemp(dir=os.path.dirname(pcrout))
+    ttmap = tmp_name[1]
     report(orgmap * reallength/celllength(),ttmap)
     os.system(gdal_translate + " -of PCRaster " + ttmap + " " + outfile)
+    os.remove(ttmap)
     
     
 def main(argv=None):
@@ -231,13 +234,17 @@ def main(argv=None):
 
             os.system(execstr)
             if burninmetres:
-                makeMultMap(outfile,"_temp.map",burn,gdal_translate="gdal_translate")
+                mlt_tmp_name=tempfile.mkstemp(dir=tmpdir)
+                makeMultMap(outfile,mlt_tmp_name[1],burn,gdal_translate="gdal_translate")
+                os.remove(mlt_tmp_name[1])
         else:
             os.system(gdal_translate + " -of PCRaster " + outfilehires + " " + pcroutfilehires)
             os.system("resample -e 20 -r "+ str(rsamp) + " " + pcroutfilehires + " " + pcroutfile)
             os.system(gdal_translate + " -of " + format + " " + pcroutfile + " " + outfile)
             if burninmetres:
-                makeMultMap(outfile,"_temp.map",burn,gdal_translate="gdal_translate")
+                mlt_tmp_name=tempfile.mkstemp(dir=tmpdir)
+                makeMultMap(outfile,mlt_tmp_name[1],burn,gdal_translate="gdal_translate")
+                os.remove(mlt_tmp_name[1])
 
         
         if delete_hires:
