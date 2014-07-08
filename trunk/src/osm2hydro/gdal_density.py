@@ -190,14 +190,14 @@ def main(argv=None):
     
     if tmpdir is not ".":
       tmp_name=tempfile.mkstemp(dir=tmpdir)
-      outfilehires = tmp_name[1]  + "_hires.tif"
+      outfilehires = tmp_name[1]
     else:
       tmp_name=tempfile.mkstemp(dir=tmpdir)
-      outfilehires = tmp_name[1] +  "_hires.tif"
+      outfilehires = tmp_name[1]
 
       
     print "gdal_density starting with options: " + str(argv)
-    print "tmpfile: " + tmp_name[1]
+    print "tmpfile hires: " + tmp_name[1]
 
     if not os.path.exists(poly_ds):
         return
