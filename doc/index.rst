@@ -120,7 +120,12 @@ Usage
 
    usage
 
+Installation
+============
+.. toctree::
+   :maxdepth: 2
 
+   installation
 
 osm2hydro
 =========
@@ -136,7 +141,8 @@ osm2shp
 =======
 
 Osm2shp is a wrapper around ogr2ogr. It uses an ini type configuration file
-to extract  specified OSM tags to separate shape files.
+to extract  specified OSM tags to separate shape files. osm2shp can be used
+separately from osm2hydro.
 
 .. toctree::
    :maxdepth: 2

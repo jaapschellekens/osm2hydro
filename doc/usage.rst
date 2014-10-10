@@ -14,8 +14,13 @@ Once these are made you can run osm2hydro:
 
 osm2hydro -c osm2hyro.ini
 
+See the example directory fror further information. The easiest way to start is to take an 
+example and adjust it to your needs.
+
 
 Using the tools from within python
 ----------------------------------
 
-See the ipython notebook for an example
+See the ipython notebooks for examples
+
+
