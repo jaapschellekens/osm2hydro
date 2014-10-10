@@ -18,4 +18,5 @@
 + ALL: Add documentation (sphinx)
 + ALL: Move double code to a function library
 - GD: add tools to detect bridges and fix DEM based on OSM (river + road intersection)
++ ALL: make into a package and streamline installation (start with a step by step installation guide)
 
