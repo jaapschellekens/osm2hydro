@@ -11,19 +11,20 @@ Usage:
   -o outputdir - the directory to store the output in
   -h - show this information
   -c configfile (default is osm2shp.ini)
-  -M maxproc - maximum number of ogr2ogr processes to start (default = 2)
+  -M maxproc - maximum number of ogr2ogr processes to start (default = 1)
 
 
 dependencies
 ~~~~~~~~~~~~
 
   - ogr2ogr (tested with gdal >= 1.10.0)
-  - the OSM_CONFIG_FILE environment var should be set and point to a valid gdal osmconf.ini file
+  - the OSM_CONFIG_FILE environment var should be set and point to a valid gdal osmconf.ini file. The
+    osm2hydro source code contains a version that should be used with this script.
   
 ini file
 ~~~~~~~~
 
-The ini file has a section for each shape file created:
+The ini file has a section for each shape file that will be created:
 
   ::
 
@@ -113,7 +114,7 @@ def configget(log,config,section,var,default):
 def configset(config,section,var,value, overwrite=False):
     """   
     Sets a string in the in memory representation of the config object
-    Deos NOT overwrite existing values if overwrite is set to False (default)
+    Does NOT overwrite existing values if overwrite is set to False (default)
     
     Input:
         - config - python ConfigParser object
@@ -142,9 +143,7 @@ def iniFileSetUp(configfile):
     """
     Reads .ini file and sets default values if not present
     """
-    # TODO: clean up wflwo specific stuff
-    #setTheEnv(runId='runId,caseName='caseName)
-    # Try and read config file and set default options
+
     config = ConfigParser.SafeConfigParser()
     config.optionxform = str
     config.read(configfile)
@@ -268,8 +267,10 @@ def main(argv=None):
         if len(argv) == 0:
             usage()
             return    
-    rootLoc        = os.path.split(sys.argv[0])[0]
-    
+    rootLoc = os.path.split(sys.argv[0])[0]
+
+    # First try to find org2ogr in a dist directory (part of the osm2hydro package). If
+    # not found assume it is located in the search path
     if platform.system() == "Linux" or platform.system() == "Linux2":
         ogr2ogr = os.path.abspath(os.path.join(rootLoc,'..','..','dist','linux','ogr2ogr'))
     else:
@@ -281,7 +282,7 @@ def main(argv=None):
     osmfile= "not_set.osm"
     outputdir= "./"
     configfile = 'osm2shp.ini'
-    maxcpu = 2
+    maxcpu = 1
    
     try:
         opts, args = getopt.getopt(argv, 'O:o:hc:M:')
@@ -301,10 +302,12 @@ def main(argv=None):
     if not os.path.exists(outputdir):
         os.makedirs(outputdir)    
 
+    # Set interleaved reading
     os.environ['OGR_INTERLEAVED_READING']='YES'
 
     if not os.path.exists(os.environ['OSM_CONFIG_FILE']):
         print "Gdal osm config cannot be found: " + os.environ['OSM_CONFIG_FILE']
+        print "... or the OSM_CONFIG_FILE environment variable is not set"
         
     config = iniFileSetUp(configfile)
     
