@@ -234,6 +234,15 @@ def recursive_glob(rootdir='.', suffix=''):
 
 def readMap(fileName, fileFormat):
     """ Read geographical file into memory
+   Read geographical file into memory
+    
+    Input:
+        filename - string holding file name
+        fileFormat - a file format string according to the GDAL list of formats
+        
+    Returns:
+        x,y,data,FillVal
+  
     """
     # Open file for binary-reading
     mapFormat = gdal.GetDriverByName(fileFormat)
@@ -508,7 +517,7 @@ def main(opts):
         if o == '-F': osmFileName =  a
 
 
-    print "+++++++++++++++++++++" + osmExtractName
+    #print "+++++++++++++++++++++" + osmExtractName
     if configFile == None:
          usage()
          sys.exit(2) 
@@ -717,7 +726,9 @@ def main(opts):
     if configget(logger,config,'osm','SkipOsmExtract',str(SkipOsmExtract)) == 'True':
         SkipOsmExtract=True
 
-    print 'skip OSM' + str(SkipOsmExtract)
+
+
+
     mergeroads=bool(configget(logger,config,'osm','mergeroads',str(mergeroads)))
     
     resamp_grid_method=float(configget(logger,config,'osm','resamp',"10.0"))
@@ -814,7 +825,7 @@ def main(opts):
           logger.info("Processing OSM file...")
           # first derive extracted part of osm file, -0.1 and + 0.1 are used to select within a larger area to minimize boundary effects --complex-ways --complete-ways do not do the job
           command = str('%s %s  -v  --out-pbf --hash-memory=1000 --drop-version --drop-relations --complex-ways --complete-ways --drop-author -b="%f,%f,%f,%f" -o=%s') % (osmconvert_exe, osmFile, xmin-0.1, ymin-0.1, xmax+0.1, ymax+0.1, osmExtract)
-          print command
+          logger.debug(command)
 
           #command = str('%s %s --drop-broken-refs  -v  -b="%f,%f,%f,%f" -o=%s') % (osmconvert_exe, osmFile, xmin, ymin, xmax, ymax, osmExtract)
           ret = os.system(command)

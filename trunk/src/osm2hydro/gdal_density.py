@@ -64,6 +64,7 @@ import osgeo.osr as osr
 import osgeo.gdal as gdal
 import math
 import tempfile
+import time
 
 def usage(*args):
     sys.stdout = sys.stderr
@@ -137,7 +138,11 @@ def makeMultMap(outfile,pcrout,metres,gdal_translate="gdal_translate"):
     ttmap = tmp_name[1]
     report(orgmap * reallength/celllength(),ttmap)
     os.system(gdal_translate + " -of PCRaster " + ttmap + " " + outfile)
-    os.remove(ttmap)
+
+    try:
+        os.remove(ttmap)
+    except:
+        print "Failed to remove: " + ttmap
     
     
 def main(argv=None):
@@ -230,13 +235,16 @@ def main(argv=None):
         
         if resamplewithgdal:
             execstr = gdal_warp + " -ot Float32 -r average -ts " + str(width) + " " + str(height) + " -te " + str(extent[0]) + " " + str(extent[1]) + " " + str(extent[2]) + " " + str(extent[3]) + " " + outfilehires + ' ' + outfile
-            os.execstr_org = gdal_warp + " -ot Float32 -r average -tr "+ str(cellsize) + " " + str(cellsize) + " " + outfilehires + ' ' + outfile
+            #os.execstr_org = gdal_warp + " -ot Float32 -r average -tr "+ str(cellsize) + " " + str(cellsize) + " " + outfilehires + ' ' + outfile
 
             os.system(execstr)
             if burninmetres:
                 mlt_tmp_name=tempfile.mkstemp(dir=tmpdir,prefix="mlt_1_")
                 makeMultMap(outfile,mlt_tmp_name[1],burn,gdal_translate="gdal_translate")
-                os.remove(mlt_tmp_name[1])
+                try:
+                    os.remove(mlt_tmp_name[1])
+                except:
+                    print "Failed to remove: " + mlt_tmp_name[1]
         else:
             os.system(gdal_translate + " -of PCRaster " + outfilehires + " " + pcroutfilehires)
             os.system("resample -e 20 -r "+ str(rsamp) + " " + pcroutfilehires + " " + pcroutfile)
@@ -246,9 +254,13 @@ def main(argv=None):
                 makeMultMap(outfile,mlt_tmp_name[1],burn,gdal_translate="gdal_translate")
                 os.remove(mlt_tmp_name[1])
 
-        
+
         if delete_hires:
-            os.remove(outfilehires)
+            try:
+                os.remove(outfilehires)
+            except:
+                print "Failed to delete tmp file: " + outfilehires
+
     else: # create an empty file9
         geotransform = (extent[0], hirescellsize, 0.0, extent[1], 0.0, -hirescellsize)
         raster = gdal.GetDriverByName('GTiff')
