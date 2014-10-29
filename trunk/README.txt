@@ -32,8 +32,11 @@ Installation
 
 >> TODO <<
 
-List all required libraries, download links, versions, where to put them (third-party)
-- GDAL >- 10.1.0
+Do NOT install osm2hydro in a directory with a space in the name (e.g. "Program Files")
+
+Required libraries
+
+- GDAL >- 10.1.0 (Both the executables and the python bindings)
 - PyWavelets - http://www.pybytes.com/pywavelets/
 - PyProj - http://code.google.com/p/pyproj/
 
@@ -44,18 +47,9 @@ Usage
 Most of the functionality of the osm2hydro tools can be found in the examples/.
 
 
->> TODO <<
 
-Extracted from the article:
-
-1. osmconvert
-2. osm2shp
-3. poly_density, gdal_density
-4. <corrections?>
-
-
-Developing on Windows
-=====================
+Developing on Windows (only needed for active development)
+==========================================================
 
 Download and Instally the following Python packages and development tools:
 
