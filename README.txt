@@ -108,9 +108,7 @@ Gennadii.Donchyts@deltares.nl
 Citations
 =========
 
->> TODO: update final name once the article is submitted <<
+Schellekens, J., Brolsma, R.J., Dahm, R.J., Donchyts, G.V., Winsemius, H.C., 2014. Rapid setup of hydrological and hydraulic models using OpenStreetMap and the SRTM derived digital elevation model. Environmental Modelling & Software 61, 98–105. doi:10.1016/j.envsoft.2014.07.006
 
-Building rapid assessment hydrological models using open data and OpenStreetMap
-J. Schellekens, R.J. Brolsma, R.J. Dahm, G.V. Donchyts, H.C. Winsemius
 
 
