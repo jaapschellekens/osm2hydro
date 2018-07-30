@@ -153,8 +153,8 @@ def main(argv=None):
             return    
     
 
-    gdal_rasterize = "gdal_rasterize"
-    gdal_translate ="gdal_translate"
+    gdal_rasterize = "gdal_rasterize -co TILED=TRUE -co COMPRESS=LZW"
+    gdal_translate ="gdal_translate -co TILED=TRUE -co COMPRESS=LZW"
     gdal_warp = "gdalwarp"
     delete_hires=True
     rsamp = 10.0

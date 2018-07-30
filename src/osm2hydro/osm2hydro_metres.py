@@ -86,7 +86,7 @@ import gdal_merge
 import poly_density
 import osm2shp
 import gdal_density
-import dem_filter
+#import dem_filter
 import pdb
 import scipy.signal as signal
 import map2shape
@@ -348,7 +348,7 @@ def filter_shape(attribute, value, origShape, transShape):
             value_string = str(value_string + ',')
         
     # value_string = str(value_string + '\'')
-    command = 'ogr2ogr -where "%s in (%s)" %s %s' % (attribute, value_string, transShape, origShape)
+    command = '/usr/bin/ogr2ogr -where "%s in (%s)" %s %s' % (attribute, value_string, transShape, origShape)
     os.system(command)
 
 def burn_lines(shapeFile, mapFile, value, x, y):
@@ -871,11 +871,11 @@ def main(opts):
          # now create indexes to speed up processing
         if not SkipShapes:
             # now initiate a new file, containing the first layer of the list of waterway files
-            command = 'ogr2ogr ' + lu_waterway_all + ' ' + lu_waterway_list[0]
+            command = '/usr/bin/ogr2ogr ' + lu_waterway_all + ' ' + lu_waterway_list[0]
             os.system(command)
             # now add all remaining files from the list
             for lu_waterway_layer in lu_waterway_list[1:]:
-                command = 'ogr2ogr -update -append ' + lu_waterway_all + ' ' + lu_waterway_layer + ' -nln ' + os.path.split(lu_waterway_all)[1].split('.')[0]
+                command = '/usr/bin/ogr2ogr -update -append ' + lu_waterway_all + ' ' + lu_waterway_layer + ' -nln ' + os.path.split(lu_waterway_all)[1].split('.')[0]
                 os.system(command)
        
       

@@ -179,8 +179,11 @@ def mkogr2ogrstr(config,sec):
         if stype=='multipolygons':
             thestr = "-lco SHPT=POLYGON -sql \"select * from multipolygons where " + thestr
         else:
-            print "unexpected type in ini file section " + sec + "(" + stype +")"
-            return None
+                if stype=='other_relations':
+                    thestr = "-lco SHPT=POLYGON -sql \"select * from other_relations where " + thestr
+                else:
+                     print "unexpected type in ini file section " + sec + "(" + stype +")"
+                     return None
     
     thestr = thestr + "\""
             
@@ -277,7 +280,7 @@ def main(argv=None):
         ogr2ogr = os.path.abspath(os.path.join(rootLoc,'..','..','dist','win32','ogr2ogr.exe'))
 
     if not os.path.exists(ogr2ogr):
-        ogr2ogr = "ogr2ogr"   
+        ogr2ogr = "/usr/bin/ogr2ogr"
  
     osmfile= "not_set.osm"
     outputdir= "./"
